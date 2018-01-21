@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}BB{% endblock %}
+
+{% block content %}
+    <h2>{{ gamecategory }}</h2>
+    <p>Select the players, enter the ranks then press 'GO'</p>
+
+    {% if players %}
+    <form action="{% url 'gamescoring:ScoreConfirm' %}" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="gamecategory" value="{{ gamecategory }}"/>
+    <div class="row">
+        <div>
+            {% for player in players %}
+                <input type="checkbox" name="selectp" id="selectp-{{ player.id }}" value="{{ player.id }}" onclick="disableSelect(this.id)" checked/>
+                <label for="{{ player.id }}" style="width: 100px">{{ player.name }}</label>
+                {% if gamecategory == '501' %}
+                    <select  name="pscore" id="pscore-{{ player.id }}"></select>
+                {% elif gamecategory == 'BB' %}
+                    <input  type="number" min="0" max="198" required value="0" name='pscore' id="pscore-{{ player.id }}" >
+                {% endif %}
+                <br>
+            {% endfor %}
+        </div>
+    </div>
+    <input type="submit" class="btn btn-success" value="GO"/>
+    </form>
+    {% else %}
+        <p>No active player(s) in the database. Please add some.</p>
+    {% endif %}
+<script>
+    var gamecategory = "{{ gamecategory|safe }}";
+</script>
+    <script src="{% static 'gamescoring/dartsscoring.js' %}"></script>
+{% endblock %}

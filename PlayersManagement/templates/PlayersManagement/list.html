@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}index{% endblock %}
+
+{% block content %}
+{% if object_list %}
+    <div class="row">
+        <h3><b>Current darts</b></h3>
+    </div>
+    <div class="row">
+    {% for player in object_list %}
+        <div class="col">
+            {% if player.picture %}
+                <a href="{% url 'PlayersManagement:PlayerDetail' player.name %}">
+                    <img src="{{ player.picture.url }}" class="img-fluid" alt="Responsive image" title="Detail">
+                </a>
+            {% endif %}
+            <div>
+            <a class="btn btn-outline-secondary" href="{% url 'PlayersManagement:PlayerDetail' player.name %}" title="Detail">{{ player.name }}</a>
+            </div>
+            <div>
+            <!-- View Details -->
+            <a href="{% url 'PlayersManagement:PlayerDetail' player.name %}" class="btn btn-outline-secondary btn-sm" role="button">
+                <span class="fas fa-info-circle fa-2x" title="Detail"></span>
+            </a>
+            <!-- Update Player -->
+            <a href="{% url 'PlayersManagement:UpdatePlayer' player.name %}" class="btn btn-outline-secondary btn-sm" role="button">
+                <span class="fas fa-edit fa-2x" title="Edit"></span>
+            </a>
+            <!-- Delete Player -->
+            <a href="{% url 'PlayersManagement:DeletePlayer' player.name %}" class="btn btn-outline-secondary btn-sm" role="button">
+                <span class="fas fa-trash-alt fa-2x" title="Delete"></span>
+            </a>
+            </div>
+        </div>
+    {% endfor %}
+{% endif %}
+<!-- Add Player -->
+<div class="col">
+    <a href="{% url 'PlayersManagement:CreatePlayer' %}" class="btn btn-outline-secondary" role="button">
+        <span class="fas fa-plus-square fa-w-14 fa-2x" title="Add a New Player"></span>
+    </a>
+</div>
+</div>
+{% endblock %}

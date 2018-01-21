@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}Confirm{% endblock %}
+
+{% block content %}
+    <p>Confirm the entry into the database ?</p>
+    <form action="{% url 'gamescoring:SaveScore' %}"method="post">{% csrf_token %}
+        <input type="hidden" name="gamecategory" value="{{ gamecategory }}"/>
+            <table class="table">
+              <thead>
+                <tr>
+                    {% for s in header %}
+                        <th scope="col">{{ s }}</th>
+                    {% endfor %}
+                </tr>
+              </thead>
+                <tbody>
+                {% for p,r,s in zipped %}
+                    <input type="hidden" name="selectedp" value="{{ p }}"/>
+                    <input type="hidden" name="prank" value="{{ r }}"/>
+                    <input type="hidden" name="pscore" value="{{ s }}"/>
+                    <tr>
+                        <td>{{ p }}</td>
+                        <td>{{ r }}</td>
+                        {% if gamecategory == 'BB' %}
+                            <td>{{ s }}</td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <input type="submit" class="btn btn-success" value="Confirm" />
+    </form>
+{% endblock %}

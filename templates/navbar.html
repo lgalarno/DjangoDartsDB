@@ -1,0 +1,61 @@
+<nav class="navbar navbar-expand-md navbar-dark navbar-fixed-top bg-dark ">
+    <a class="navbar-brand" href="/">LGdartsDBweb</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="/">Home<span class="sr-only">(current)</span></a>
+            </li>
+{#            TODO: Dropdown with list and add player ?#}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url "PlayersManagement:PlayersList" %}">Players Management</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">New Reslut</a>
+                <div class="dropdown-menu" aria-labelledby="dropdown01">
+                    <a class="dropdown-item" href="/score/BB">BB</a>
+                    <a class="dropdown-item" href="/score/501">501</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="dropdown02" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tables</a>
+                <div class="dropdown-menu" aria-labelledby="dropdown02">
+                    <a class="dropdown-item" href="/table/501/">501</a>
+                    <a class="dropdown-item" href="/table/BB/" onclick="window.open('/table/BBScores/');">BB</a>
+                    <a class="dropdown-item" href="/table/501/" onclick="window.open('/table/BB/');window.open('/table/BBScores/');">All</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="dropdown02" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">CSV</a>
+                <div class="dropdown-menu" aria-labelledby="dropdown02">
+                    <a class="dropdown-item" title="make csv files" href="{% url "scoretable:csvzip" %}" >CSV in a Zip</a>
+                    <a class="dropdown-item" title="make csv files" href="/table/csv/501/">501</a>
+                    <a class="dropdown-item" title="make csv files" href="/table/csv/BB/">BB Ranks</a>
+                    <a class="dropdown-item" title="make csv files" href="/table/csv/BBScores/" >BB Scores</a>
+                    <a class="dropdown-item" title="upload csv files" href="{% url 'scoretable:upload_csv' %}" >Upload initial CSV</a>
+                </div>
+            </li>
+        </ul>
+
+        <ul class="nav navbar-nav navbar-right">
+          {% if request.user.is_authenticated %}
+              <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
+          {% endif %}
+        </ul>
+
+        {% if not request.user.is_authenticated and not "login" in request.get_full_path %}
+        <form class="form-inline my-2 my-lg-0" action="{% url 'login' %}" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <input class="form-control mr-sm-2" type="text" name='username' placeholder='Username'>
+            </div>
+            <div class="form-group">
+                <input class="form-control mr-sm-2" type="password" name='password' placeholder='Password'>
+            </div>
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Sign in</button>
+        </form>
+        {% endif %}
+    </div>
+</nav>

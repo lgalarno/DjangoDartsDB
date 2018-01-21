@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<p>Here is your file:</p>
+    <a title="file to download" href="{% url "scoretable:downloadzip" zipfilename %}">{{ zipfilename }}</a>
+{% endblock %}

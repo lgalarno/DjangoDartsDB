@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}detail{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <!-- Left Info -->
+        <div class="col-sm-4 col-md-3">
+            <h1>{{ player.name }}</h1>
+            <h3>{{ player.description }}</h3>
+            <h4>{% if player.active %}
+                Active
+            {% else %}
+                Inactive
+            {% endif %}</h4>
+            <h4><small>Created: {{ player.timestamp }}</small></h4>
+            <!-- Update Player -->
+            <a href="{% url 'PlayersManagement:UpdatePlayer' player.name %}" class="btn btn-outline-secondary btn-sm" role="button" title="Edit">
+                <span class="fas fa-edit fa-2x"></span>
+            </a>
+            <!-- Delete Player -->
+            <a href="{% url 'PlayersManagement:DeletePlayer' player.name %}" class="btn btn-outline-secondary btn-sm" role="button" title="Delete">
+                <span class="fas fa-trash-alt fa-2x"></span>
+            </a>
+        </div>
+        <!-- Right picture -->
+       <div class="col-sm-8 col-md-9">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                        {% if player.picture %}
+                            <img src="{{ player.picture.url }}" class="img-fluid" alt="Responsive image">
+                        {% else %}
+                            <h3>No image to display</h3>
+                        {% endif %}
+                 </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
