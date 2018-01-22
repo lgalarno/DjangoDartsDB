@@ -20,4 +20,4 @@ class Player(models.Model):
 
     def get_absolute_url(self):
         #return "/player/{0}".format(self.name)
-        return reverse('PlayersManagement:PlayerDetail', kwargs={'pname': self.name})
+        return reverse('PlayersManagement:PlayerDetail', kwargs={'name': self.name})

@@ -29,7 +29,7 @@ class PlayerUpdate(UpdateView):
 
 class PlayerDelete(DeleteView):
     model = Player
-    success_url = reverse_lazy('PlayersManagement:PlayersIndex')
+    success_url = reverse_lazy('PlayersManagement:PlayersList')
     def get_object(self):
         object = get_object_or_404(Player, name=self.kwargs['name'])
         return object

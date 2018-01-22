@@ -63,7 +63,8 @@ def webtables(request, category=None):
         return HttpResponseRedirect('/')
 
 def csvzip(request):
-    path =  os.path.join(os.path.dirname(settings.BASE_DIR), 'media/files')
+    path =  os.path.join(settings.MEDIA_ROOT, 'files')
+    print(path)
     datesuffix = datetime.datetime.now().strftime('_%Y_%m_%d')
     zipfilename = 'DartsTablesCSV' + datesuffix + '.zip'
     longzipfilename = os.path.join(path, zipfilename)
