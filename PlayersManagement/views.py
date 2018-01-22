@@ -17,15 +17,21 @@ class PlayerDetailView(DetailView):
         return object
 
 class CreatePlayer(CreateView):
+    context_object_name = 'Create'
     model = Player
     fields = ['name', 'description', 'picture', 'active']
 
 class PlayerUpdate(UpdateView):
+    context_object_name = 'Update'
     model = Player
     fields = ['name', 'description', 'picture', 'active']
     def get_object(self):
         object = get_object_or_404(Player, name=self.kwargs['name'])
         return object
+    def get_context_data(self, **kwargs):
+        context = super(PlayerUpdate, self).get_context_data(**kwargs)
+        context['update_view'] = True
+        return context
 
 class PlayerDelete(DeleteView):
     model = Player

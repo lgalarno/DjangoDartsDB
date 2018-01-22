@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=32)),
-                ('path', models.FileField(upload_to=scoretable.models.download_location)),
+                ('path', models.FileField()),
                 ('timesdownloaded', models.IntegerField(blank=True, null=True)),
                 ('timestamp', models.DateTimeField(auto_now_add=True)),
             ],

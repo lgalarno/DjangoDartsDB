@@ -49,13 +49,13 @@ def SaveScore(request):
         try:
             requestdict = dict(request.POST)
             selectedplayers = requestdict.get('selectedp')
-            pscore = requestdict.get('pscore')
+            pscores = requestdict.get('pscore')
             pranks = requestdict.get('prank')
             category = request.POST.get('gamecategory')
             header = ['Player', 'rank']
             if category == 'BB':
                 header.append('score')
-            zipped = zip(selectedplayers, pranks, pscore)
+            zipped = zip(selectedplayers, pranks, pscores)
             g = GameNumber(date=now().date(),
                            time=now().time(),
                            gamenumber= GameNumber.objects.filter(category = category).count()+1,
@@ -63,7 +63,7 @@ def SaveScore(request):
             g.save()
             for i in range(0,len(selectedplayers)):
                 p = Player.objects.get(name=selectedplayers[i])
-                s = Participant(game=g, rank=pscore[i], player=p)
+                s = Participant(game=g, rank=pranks[i], score=pscores[i],player=p)
                 s.save()
             context = {
                 "header":header,

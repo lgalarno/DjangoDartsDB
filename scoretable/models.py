@@ -1,9 +1,6 @@
 from django.db import models
 from django.urls import reverse
 
-def download_location():
-    pass
-
 class zipcsvfile(models.Model):
     filename        = models.CharField(max_length=32)
     path            = models.FileField()

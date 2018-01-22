@@ -12,7 +12,6 @@ import csv
 from .models import zipcsvfile
 from .maketables import WriteTables, WriteScoreTables, Write_csv, CSV_to_db
 
-
 def csvweb(request, category=None):
     if request.method == 'GET':
         if category in ['501','BB']:
@@ -47,9 +46,6 @@ def webtables(request, category=None):
         else:
             messages.warning(request, "Nothing to do")
             return HttpResponseRedirect('/')
-        # if len(rtable)<1:
-        #     messages.warning(request, "No {} games found.".format(tabletype))
-        #     return HttpResponseRedirect('/'),
         context = {'title':'DartsTables{}'.format(category),
                    'maxplist': maxplist,
                    'headerrank':headerrank,
@@ -64,7 +60,6 @@ def webtables(request, category=None):
 
 def csvzip(request):
     path =  os.path.join(settings.MEDIA_ROOT, 'files')
-    print(path)
     datesuffix = datetime.datetime.now().strftime('_%Y_%m_%d')
     zipfilename = 'DartsTablesCSV' + datesuffix + '.zip'
     longzipfilename = os.path.join(path, zipfilename)

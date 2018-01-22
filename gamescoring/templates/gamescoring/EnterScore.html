@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}BB{% endblock %}
+{% block title %}{{ gamecategory }}{% endblock %}
 
 {% block content %}
     <h2>{{ gamecategory }}</h2>
@@ -14,18 +14,31 @@
     <div class="row">
         <div>
             {% for player in players %}
-                <input type="checkbox" name="selectp" id="selectp-{{ player.id }}" value="{{ player.id }}" onclick="disableSelect(this.id)" checked/>
-                <label for="{{ player.id }}" style="width: 100px">{{ player.name }}</label>
-                {% if gamecategory == '501' %}
-                    <select  name="pscore" id="pscore-{{ player.id }}"></select>
-                {% elif gamecategory == 'BB' %}
-                    <input  type="number" min="0" max="198" required value="0" name='pscore' id="pscore-{{ player.id }}" >
-                {% endif %}
-                <br>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <input type="checkbox" name="selectp" id="selectp-{{ player.id }}" value="{{ player.id }}" onclick="disableSelect(this.id)" checked>
+                            <label for="selectp-{{ player.id }}" style="width: 100px">{{ player.name }}</label>
+                        </div>
+                    </div>
+                    {% if gamecategory == '501' %}
+                        <select  name="pscore" id="pscore-{{ player.id }}"></select>
+                    {% elif gamecategory == 'BB' %}
+                        <input  type="number" min="0" max="198" required value="0" name='pscore' id="pscore-{{ player.id }}" >
+                    {% endif %}
+                </div>
+{#                <input type="checkbox" name="selectp" id="selectp-{{ player.id }}" value="{{ player.id }}" onclick="disableSelect(this.id)" checked/>#}
+{#                <label for="selectp-{{ player.id }}" style="width: 100px">{{ player.name }}</label>#}
+{#                {% if gamecategory == '501' %}#}
+{#                    <select  name="pscore" id="pscore-{{ player.id }}"></select>#}
+{#                {% elif gamecategory == 'BB' %}#}
+{#                    <input  type="number" min="0" max="198" required value="0" name='pscore' id="pscore-{{ player.id }}" >#}
+{#                {% endif %}#}
+
             {% endfor %}
+        <input type="submit" class="btn btn-success" value="GO"/>
         </div>
     </div>
-    <input type="submit" class="btn btn-success" value="GO"/>
     </form>
     {% else %}
         <p>No active player(s) in the database. Please add some.</p>
