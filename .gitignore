@@ -4,7 +4,6 @@ staticfiles
 db.sqlite3
 dartsDBweb/settings/local.py
 .idea
-**/migrations/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
