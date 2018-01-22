@@ -2,6 +2,25 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
-<p>Here is your file:</p>
-    <a title="file to download" href="{% url "scoretable:downloadzip" zipfilename %}">{{ zipfilename }}</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">File</th>
+            <th scope="col">Number of downloads</th>
+            <th scope="col">Date</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for f in allfiles %}
+        <tr>
+            <td><a title="download" href="{% url "scoretable:downloadzip" f.filename %}">{{ f.filename }}</a></td>
+            <td>{{ f.timesdownloaded }}</td>
+            <td><small>{{ f.timestamp }}</small></td>
+            <td><a title="delete" class="btn btn-outline-secondary btn-sm" href="{% url "scoretable:deletezip" f.id %}"><span class="fas fa-trash-alt"></span></a></td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
 {% endblock %}

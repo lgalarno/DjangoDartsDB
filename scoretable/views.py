@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.contrib import messages
+from django.http import Http404
 from django.utils.encoding import  smart_str
 from django.shortcuts import render, HttpResponseRedirect,HttpResponse, get_object_or_404, reverse
 
@@ -68,6 +69,7 @@ def csvzip(request):
     longzipfilename = os.path.join(path, zipfilename)
     try:
         zip_archive = zipfile.ZipFile(longzipfilename, 'w')
+
         for tabletype in ['501', 'BB']:
             rtable, stable, headerrank, headersummary, maxplist = WriteTables(tabletype)
             if len(rtable) > 0:
@@ -85,9 +87,9 @@ def csvzip(request):
         z.filename = zipfilename
         z.timesdownloaded = 0
         z.save()
+        allfiles = zipcsvfile.objects.all()
         context = {'title':'Download',
-                   'zipfilename':zipfilename,
-                   'file': longzipfilename,
+                   'allfiles':allfiles
                    }
         return render(request, 'scoretable/download.html', context)
     except:
@@ -104,6 +106,17 @@ def downloadzip(request,filename=None):
     f.timesdownloaded += 1
     f.save()
     return response
+
+def deletezip(request,PK):
+    print(PK)
+    todel = get_object_or_404(zipcsvfile, id=PK )
+    todel.path.delete()
+    todel.delete()
+    allfiles = zipcsvfile.objects.all().order_by("-timestamp")
+    context = {'title': 'Download',
+               'allfiles': allfiles
+               }
+    return render(request, 'scoretable/download.html', context)
 
 def upload_csv(request):
     if request.method == "POST":

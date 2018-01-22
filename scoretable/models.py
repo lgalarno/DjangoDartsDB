@@ -14,4 +14,3 @@ class zipcsvfile(models.Model):
         return self.filename
     def get_absolute_url(self):
         return reverse('scoretable:downloadzip', kwargs={'filename': self.filename})
-        #return "restaurants/{}".format(self.slug)

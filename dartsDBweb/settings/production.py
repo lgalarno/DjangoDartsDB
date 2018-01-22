@@ -24,8 +24,7 @@ SECRET_KEY = 'c#wa^m8os*l0#s74+5%yon&=y2@(^+zm4w4mz_@vs#8h*+_bkg'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['lgalarno.pythonanywhere.com']
 
 # Application definition
 
@@ -80,9 +79,12 @@ WSGI_APPLICATION = 'dartsDBweb.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'lgalarno$dartsDBweb',
+        'USER': 'lgalarno',
+        'PASSWORD': 's3n10r3lc0c0',
+        'HOST': 'lgalarno.mysql.pythonanywhere-services.com',
+    },
 }
 
 
