@@ -1,4 +1,4 @@
-from django.utils.timezone import now
+from django.utils import timezone
 from django.contrib import messages
 from django.shortcuts import render, HttpResponseRedirect
 from PlayersManagement.models import Player
@@ -48,16 +48,20 @@ def SaveScore(request):
     if request.method == 'POST':
         try:
             requestdict = dict(request.POST)
-            selectedplayers = requestdict.get('selectedp')
-            pscores = requestdict.get('pscore')
-            pranks = requestdict.get('prank')
             category = request.POST.get('gamecategory')
+            selectedplayers = requestdict.get('selectedp')
+            pranks = requestdict.get('prank')
+            if category == 'BB':
+                pscores = requestdict.get('pscore')
+            else:
+                pscores = [None for i in range(len(pranks))]
             header = ['Player', 'rank']
             if category == 'BB':
                 header.append('score')
             zipped = zip(selectedplayers, pranks, pscores)
-            g = GameNumber(date=now().date(),
-                           time=now().time(),
+            now = timezone.now()
+            g = GameNumber(date= timezone.localdate(now),
+                           time= timezone.localtime(now).time(),
                            gamenumber= GameNumber.objects.filter(category = category).count()+1,
                            category=category)
             g.save()
@@ -69,7 +73,7 @@ def SaveScore(request):
                 "header":header,
                 "zipped": zipped,
                 "gameID":g.gamenumber,
-                "date": str(now().date()),
+                "date": g.date,
                 "gamecategory":category
             }
             return render(request, 'gamescoring/ScoreSuccess.html', context)

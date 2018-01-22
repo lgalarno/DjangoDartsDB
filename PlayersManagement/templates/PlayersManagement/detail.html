@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load tz %}
 {% block title %}{{ player.name }}{% endblock %}
 
 {% block content %}
@@ -12,7 +13,7 @@
             {% else %}
                 Inactive
             {% endif %}</h4>
-            <h4><small>Created: {{ player.timestamp }}</small></h4>
+            <h4><small>Created: {% localtime on %}{{ player.timestamp }}{% endlocaltime %}</small></h4>
             <!-- Update Player -->
             <a href="{% url 'PlayersManagement:UpdatePlayer' player.name %}" class="btn btn-outline-secondary btn-sm" role="button" title="Edit">
                 <span class="fas fa-edit fa-2x"></span>
