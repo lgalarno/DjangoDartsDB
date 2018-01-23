@@ -3,37 +3,23 @@
 {% block title %}{{ player.name }}{% endblock %}
 
 {% block content %}
-    <div class="row">
-        <!-- Left Info -->
-        <div class="col-sm-4 col-md-3">
-            <h1>{{ player.name }}</h1>
-            <h3>{{ player.description }}</h3>
-            <h4>{% if player.active %}
-                Active
-            {% else %}
-                Inactive
-            {% endif %}</h4>
-            <h4><small>Created: {% localtime on %}{{ player.timestamp }}{% endlocaltime %}</small></h4>
+<div class="card" style="width: 24rem;">
+  {% if player.picture %}
+    <img class="card-img-top" title="Detail" src="{{ player.picture.url }}" alt="Card image cap">
+  {% endif %}
+  <div class="card-body">
+    <h5 class="card-title">{{ player.name }}</h5>
+<p class="card-text">{{ player.description }}</p>
+  <p>{% if player.active %}Active{% else %}Inactive{% endif %}</p>
+<p><small>Created: {% localtime on %}{{ player.timestamp }}{% endlocaltime %}</small></p>
             <!-- Update Player -->
-            <a href="{% url 'PlayersManagement:UpdatePlayer' player.name %}" class="btn btn-outline-secondary btn-sm" role="button" title="Edit">
-                <span class="fas fa-edit fa-2x"></span>
+            <a href="{% url 'PlayersManagement:UpdatePlayer' player.name %}" class="btn btn-outline-secondary btn-sm" role="button">
+                <span class="fas fa-edit fa-2x" title="Edit"></span>
             </a>
             <!-- Delete Player -->
-            <a href="{% url 'PlayersManagement:DeletePlayer' player.name %}" class="btn btn-outline-secondary btn-sm" role="button" title="Delete">
-                <span class="fas fa-trash-alt fa-2x"></span>
+            <a href="{% url 'PlayersManagement:DeletePlayer' player.name %}" class="btn btn-outline-secondary btn-sm" role="button">
+                <span class="fas fa-trash-alt fa-2x" title="Delete"></span>
             </a>
-        </div>
-        <!-- Right picture -->
-       <div class="col-sm-8 col-md-9">
-            <div class="panel panel-default">
-                <div class="panel-body">
-                        {% if player.picture %}
-                            <img src="{{ player.picture.url }}" class="img-fluid" alt="Responsive image">
-                        {% else %}
-                            <h3>No image to display</h3>
-                        {% endif %}
-                 </div>
-            </div>
-        </div>
-    </div>
+  </div>
+</div>
 {% endblock %}

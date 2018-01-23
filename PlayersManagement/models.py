@@ -1,5 +1,8 @@
 from django.db import models
+from django.dispatch import receiver
 from django.urls import reverse
+
+import os
 
 def upload_location(instance, filename):
     return "{0}/{1}".format(instance, filename)
@@ -19,5 +22,34 @@ class Player(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        #return "/player/{0}".format(self.name)
         return reverse('PlayersManagement:PlayerDetail', kwargs={'name': self.name})
+
+@receiver(models.signals.post_delete, sender=Player)
+def auto_delete_file_on_delete(sender, instance, **kwargs):
+    """
+    Deletes file from filesystem
+    when corresponding `Player` object is deleted.
+    """
+    if instance.picture:
+        if os.path.isfile(instance.picture.path):
+            os.remove(instance.picture.path)
+
+@receiver(models.signals.pre_save, sender=Player)
+def auto_delete_file_on_change(sender, instance, **kwargs):
+    """
+    Deletes old file from filesystem
+    when corresponding `Player` object is updated
+    with new file.
+    """
+    if not instance.pk:
+        return False
+
+    try:
+        old_picture = Player.objects.get(pk=instance.pk).picture
+    except Player.DoesNotExist:
+        return False
+
+    new_picture = instance.picture
+    if not old_picture == new_picture:
+        if os.path.isfile(old_picture.path):
+            os.remove(old_picture.path)
