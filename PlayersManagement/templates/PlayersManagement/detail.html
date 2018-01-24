@@ -13,12 +13,12 @@
   <p>{% if player.active %}Active{% else %}Inactive{% endif %}</p>
 <p><small>Created: {% localtime on %}{{ player.timestamp }}{% endlocaltime %}</small></p>
             <!-- Update Player -->
-            <a href="{% url 'PlayersManagement:UpdatePlayer' player.name %}" class="btn btn-outline-secondary btn-sm" role="button">
-                <span class="fas fa-edit fa-2x" title="Edit"></span>
+            <a href="{% url 'PlayersManagement:UpdatePlayer' id=player.id slug=player.slug %}" class="btn btn-secondary btn-sm" role="button">
+                <i class="fas fa-edit fa-2x" title="Edit"></i>
             </a>
             <!-- Delete Player -->
-            <a href="{% url 'PlayersManagement:DeletePlayer' player.name %}" class="btn btn-outline-secondary btn-sm" role="button">
-                <span class="fas fa-trash-alt fa-2x" title="Delete"></span>
+            <a href="{% url 'PlayersManagement:DeletePlayer' id=player.id slug=player.slug %}" class="btn btn-secondary btn-sm" role="button">
+                <i class="fas fa-trash-alt fa-2x" title="Delete"></i>
             </a>
   </div>
 </div>

@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.http import Http404
 from django.utils.encoding import  smart_str
 from django.shortcuts import render, HttpResponseRedirect,HttpResponse, get_object_or_404, reverse
+from django.views.decorators.http import require_POST, require_GET
 
 import zipfile
 import datetime
@@ -12,52 +13,48 @@ import csv
 from .models import zipcsvfile
 from .maketables import WriteTables, WriteScoreTables, Write_csv, CSV_to_db
 
+@require_GET
 def csvweb(request, category=None):
-    if request.method == 'GET':
-        if category in ['501','BB']:
-            rtable, stable, headerrank,headersummary,maxplist = WriteTables(category)
-        elif category == 'BBScores':
-            rtable, stable, headerrank,headersummary,maxp = WriteScoreTables()
-        else:
-            messages.warning(request, "Nothing to do")
-            return HttpResponseRedirect('/')
-        # Create the HttpResponse object with the appropriate CSV header.
-        response = HttpResponse(content_type='text/csv')
-        response['Content-Disposition'] = 'attachment; filename="{}.csv"'.format(category)
-        writer = csv.writer(response)
-        writer.writerow(headerrank)
-        writer.writerows(rtable)
-        writer.writerows([''])
-        writer.writerow(headersummary)
-        writer.writerows(stable)
-        writer.writerows([''])
-        return response
-    messages.warning(request, "Nothing to do")
-    return HttpResponseRedirect('/')
-
-def webtables(request, category=None):
-    if request.method == 'GET':
-        if category in ['501', 'BB']:
-            rtable, stable, headerrank, headersummary, maxplist = WriteTables(category)
-            stable_title = 'Standings'
-        elif category == 'BBScores':
-            rtable, stable, headerrank, headersummary, maxplist = WriteScoreTables()
-            stable_title = 'Average scores'
-        else:
-            messages.warning(request, "Nothing to do")
-            return HttpResponseRedirect('/')
-        context = {'title':'DartsTables{}'.format(category),
-                   'maxplist': maxplist,
-                   'headerrank':headerrank,
-                   'headersummary':headersummary,
-                   'maintable':rtable,
-                   'summarytable':stable,
-                   'stable_title': stable_title}
-        return render(request, 'scoretable/table.html', context)
+    if category in ['501','BB']:
+        rtable, stable, headerrank,headersummary,maxplist = WriteTables(category)
+    elif category == 'BBScores':
+        rtable, stable, headerrank,headersummary,maxp = WriteScoreTables()
     else:
         messages.warning(request, "Nothing to do")
         return HttpResponseRedirect('/')
+    # Create the HttpResponse object with the appropriate CSV header.
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="{}.csv"'.format(category)
+    writer = csv.writer(response)
+    writer.writerow(headerrank)
+    writer.writerows(rtable)
+    writer.writerows([''])
+    writer.writerow(headersummary)
+    writer.writerows(stable)
+    writer.writerows([''])
+    return response
 
+@require_GET
+def webtables(request, category=None):
+    if category in ['501', 'BB']:
+        rtable, stable, headerrank, headersummary, maxplist = WriteTables(category)
+        stable_title = 'Standings'
+    elif category == 'BBScores':
+        rtable, stable, headerrank, headersummary, maxplist = WriteScoreTables()
+        stable_title = 'Average scores'
+    else:
+        messages.warning(request, "Nothing to do")
+        return HttpResponseRedirect('/')
+    context = {'title':'DartsTables{}'.format(category),
+               'maxplist': maxplist,
+               'headerrank':headerrank,
+               'headersummary':headersummary,
+               'maintable':rtable,
+               'summarytable':stable,
+               'stable_title': stable_title}
+    return render(request, 'scoretable/table.html', context)
+
+@require_GET
 def csvzip(request):
     path =  os.path.join(settings.MEDIA_ROOT, 'files')
     datesuffix = datetime.datetime.now().strftime('_%Y_%m_%d')
@@ -92,20 +89,21 @@ def csvzip(request):
         messages.warning(request, "Error making the csv files")
         return HttpResponseRedirect('/')
 
-def downloadzip(request,filename=None):
-    f = get_object_or_404(zipcsvfile, filename=filename)
+@require_GET
+def downloadzip(request,slug=None):
+    f = get_object_or_404(zipcsvfile, slug=slug)
     link = f.path
     response = HttpResponse()
     response['Content-Type']='application/zip'
-    response['Content-Disposition'] = "attachment; filename='{}'".format(filename)
+    response['Content-Disposition'] = "attachment; filename='{}'".format(f.filename)
     response['X-Sendfile']= smart_str(link)
     f.timesdownloaded += 1
     f.save()
     return response
 
-def deletezip(request,PK):
-    print(PK)
-    todel = get_object_or_404(zipcsvfile, id=PK )
+@require_GET
+def deletezip(request,id):
+    todel = get_object_or_404(zipcsvfile, id=id )
     todel.path.delete()
     todel.delete()
     allfiles = zipcsvfile.objects.all().order_by("-timestamp")
@@ -114,6 +112,7 @@ def deletezip(request,PK):
                }
     return render(request, 'scoretable/download.html', context)
 
+@require_GET
 def upload_csv(request):
     if request.method == "POST":
         csvfile = request.FILES['csvfile']

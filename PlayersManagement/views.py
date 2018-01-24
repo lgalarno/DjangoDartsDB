@@ -13,7 +13,7 @@ class PlayerDetailView(DetailView):
     model = Player
     template_name = 'PlayersManagement/detail.html'
     def get_object(self):
-        object = get_object_or_404(Player, name=self.kwargs['name'])
+        object = get_object_or_404(Player, id=self.kwargs['id'])
         return object
 
 class CreatePlayer(CreateView):
@@ -26,7 +26,7 @@ class PlayerUpdate(UpdateView):
     model = Player
     fields = ['name', 'description', 'picture', 'active']
     def get_object(self):
-        object = get_object_or_404(Player, name=self.kwargs['name'])
+        object = get_object_or_404(Player, id=self.kwargs['id'])
         return object
     def get_context_data(self, **kwargs):
         context = super(PlayerUpdate, self).get_context_data(**kwargs)
@@ -37,5 +37,5 @@ class PlayerDelete(DeleteView):
     model = Player
     success_url = reverse_lazy('PlayersManagement:PlayersList')
     def get_object(self):
-        object = get_object_or_404(Player, name=self.kwargs['name'])
+        object = get_object_or_404(Player, id=self.kwargs['id'])
         return object

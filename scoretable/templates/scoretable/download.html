@@ -15,10 +15,10 @@
     <tbody>
     {% for f in allfiles %}
         <tr>
-            <td><a title="download" href="{% url "scoretable:downloadzip" f.filename %}">{{ f.filename }}</a></td>
+            <td><a title="download" href="{{ f.get_absolute_url }}">{{ f.filename }}</a></td>
             <td>{{ f.timesdownloaded }}</td>
             <td><small>{{ f.timestamp }}</small></td>
-            <td><a title="delete" class="btn btn-outline-secondary btn-sm" href="{% url "scoretable:deletezip" f.id %}"><span class="fas fa-trash-alt"></span></a></td>
+            <td><a title="delete" class="btn btn-secondary btn-sm" href="{% url "scoretable:deletezip" f.id %}"><span class="fas fa-trash-alt"></span></a></td>
         </tr>
     {% endfor %}
     </tbody>

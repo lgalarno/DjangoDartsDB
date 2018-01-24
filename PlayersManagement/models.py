@@ -1,6 +1,7 @@
 from django.db import models
 from django.dispatch import receiver
 from django.urls import reverse
+from django.utils.text import slugify
 
 import os
 
@@ -10,6 +11,7 @@ def upload_location(instance, filename):
 # Create your models here.
 class Player(models.Model):
     name        = models.CharField(max_length=10, unique=True)
+    slug        = models.SlugField(max_length=10)
     description = models.TextField(blank=True)
     picture     = models.ImageField( upload_to = upload_location,
                               null=True,
@@ -22,7 +24,12 @@ class Player(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('PlayersManagement:PlayerDetail', kwargs={'name': self.name})
+        return reverse('PlayersManagement:PlayerDetail', args=[self.id, self.slug])
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.slug = slugify(self.name)
+        super(Player, self).save(*args, **kwargs)
 
 @receiver(models.signals.post_delete, sender=Player)
 def auto_delete_file_on_delete(sender, instance, **kwargs):

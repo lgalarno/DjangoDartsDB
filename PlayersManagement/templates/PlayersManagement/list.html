@@ -13,18 +13,18 @@
                 <img class="card-img-top" title="Detail" src="{{ player.picture.url }}" alt="Card image cap">
             {% endif %}
             <div class="card-body">
-                <h5 class="card-title"><a class="" href="{% url 'PlayersManagement:PlayerDetail' player.name %}" title="Detail">{{ player.name }}</a></h5>
+                <h5 class="card-title"><a class="" href="{{ player.get_absolute_url }}" title="Detail">{{ player.name }}</a></h5>
                 <!-- View Details -->
-                <a href="{% url 'PlayersManagement:PlayerDetail' player.name %}" class="btn btn-outline-secondary btn-sm" role="button">
-                    <span class="fas fa-info-circle fa-2x" title="Detail"></span>
+                <a href="{{ player.get_absolute_url }}" class="btn btn-secondary btn-sm" role="button">
+                    <i class="fas fa-info-circle fa-2x" title="Detail"></i>
                 </a>
                 <!-- Update Player -->
-                <a href="{% url 'PlayersManagement:UpdatePlayer' player.name %}" class="btn btn-outline-secondary btn-sm" role="button">
-                    <span class="fas fa-edit fa-2x" title="Edit"></span>
+                <a href="{% url 'PlayersManagement:UpdatePlayer' id=player.id slug=player.slug %}" class="btn btn-secondary btn-sm" role="button">
+                    <i class="fas fa-edit fa-2x" title="Edit"></i>
                 </a>
                 <!-- Delete Player -->
-                <a href="{% url 'PlayersManagement:DeletePlayer' player.name %}" class="btn btn-outline-secondary btn-sm" role="button">
-                    <span class="fas fa-trash-alt fa-2x" title="Delete"></span>
+                <a href="{% url 'PlayersManagement:DeletePlayer' id=player.id slug=player.slug %}" class="btn btn-secondary btn-sm" role="button">
+                    <i class="fas fa-trash-alt fa-2x" title="Delete"></i>
                 </a>
             </div>
         </div>
@@ -32,8 +32,8 @@
 {% endif %}
 <!-- Add Player -->
 <div class="col">
-    <a href="{% url 'PlayersManagement:CreatePlayer' %}" class="btn btn-outline-secondary" role="button">
-        <span class="fas fa-plus-square fa-w-14 fa-2x" title="Add a New Player"></span>
+    <a href="{% url 'PlayersManagement:CreatePlayer' %}" class="btn btn-secondary" role="button">
+        <i class="fas fa-plus-square fa-w-14 fa-2x" title="Add a New Player"></i>
     </a>
 </div>
 </div>

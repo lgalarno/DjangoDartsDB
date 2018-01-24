@@ -8,5 +8,5 @@ app_name = 'gamescoring'
 urlpatterns = [
     path('ScoreConfirm/', login_required(views.ScoreConfirm), name = "ScoreConfirm" ),
     path('SaveScore/', login_required(views.SaveScore), name = "SaveScore" ),
-    path('<category>/', login_required(views.EnterScore), name = "EnterScore" ),
+    path('<category>/',login_required(views.EnterScore), name = "EnterScore" ),
 ]
