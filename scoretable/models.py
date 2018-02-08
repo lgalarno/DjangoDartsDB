@@ -8,7 +8,8 @@ class zipcsvfile(models.Model):
     path            = models.FileField()
     timesdownloaded = models.IntegerField(null=True, blank=True)
     timestamp       = models.DateTimeField(auto_now_add=True, auto_now=False)
-
+    class Meta:
+        ordering = ('-timestamp',)
     def __str__(self):
         return self.filename
     def get_absolute_url(self):

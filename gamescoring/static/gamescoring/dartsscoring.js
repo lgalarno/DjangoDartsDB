@@ -30,7 +30,6 @@ function disableSelect(clicked_id){
     var playerID = splitID[splitID.length - 1];
     var pscoreID = 'pscore-'.concat(playerID);
     //var c = "{{ gamecategory|safe }}";
-    console.log(gamecategory)
     if(document.getElementById(clicked_id).checked == true){
         document.getElementById(pscoreID).removeAttribute("disabled");
     }else{

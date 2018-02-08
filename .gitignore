@@ -3,6 +3,7 @@ venv
 staticfiles
 db.sqlite3
 dartsDBweb/settings/local.py
+dartsDBweb/settings/secrets.py
 .idea
 
 # Byte-compiled / optimized / DLL files

@@ -4,7 +4,7 @@
 {% block content %}
     <h3>Upload a csv file:</h3>
     <form action="{% url "scoretable:upload_csv" %}" method="post" enctype="multipart/form-data">{% csrf_token %}
-    <input type="file" name="csvfile" />
-    <input type="submit" value="Upload" />
+        <input type="file" name="csvfile" />
+        <input type="submit" value="Upload" />
     </form>
 {% endblock %}

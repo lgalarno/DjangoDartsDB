@@ -14,11 +14,11 @@
 <p><small>Created: {% localtime on %}{{ player.timestamp }}{% endlocaltime %}</small></p>
             <!-- Update Player -->
             <a href="{% url 'PlayersManagement:UpdatePlayer' id=player.id slug=player.slug %}" class="btn btn-secondary btn-sm" role="button">
-                <i class="fas fa-edit fa-2x" title="Edit"></i>
+                <i class="fas fa-edit" title="Edit"></i>Edit
             </a>
             <!-- Delete Player -->
             <a href="{% url 'PlayersManagement:DeletePlayer' id=player.id slug=player.slug %}" class="btn btn-secondary btn-sm" role="button">
-                <i class="fas fa-trash-alt fa-2x" title="Delete"></i>
+                <i class="fas fa-trash-alt" title="Delete"></i>Delete
             </a>
   </div>
 </div>

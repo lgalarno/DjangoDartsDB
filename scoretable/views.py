@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib import messages
 from django.http import Http404
-from django.utils.encoding import  smart_str
+from django.utils.encoding import smart_str
 from django.shortcuts import render, HttpResponseRedirect,HttpResponse, get_object_or_404, reverse
 from django.views.decorators.http import require_POST, require_GET
 
@@ -13,7 +13,6 @@ import csv
 from .models import zipcsvfile
 from .maketables import WriteTables, WriteScoreTables, Write_csv, CSV_to_db
 
-@require_GET
 def csvweb(request, category=None):
     if category in ['501','BB']:
         rtable, stable, headerrank,headersummary,maxplist = WriteTables(category)
@@ -34,7 +33,6 @@ def csvweb(request, category=None):
     writer.writerows([''])
     return response
 
-@require_GET
 def webtables(request, category=None):
     if category in ['501', 'BB']:
         rtable, stable, headerrank, headersummary, maxplist = WriteTables(category)
@@ -54,7 +52,6 @@ def webtables(request, category=None):
                'stable_title': stable_title}
     return render(request, 'scoretable/table.html', context)
 
-@require_GET
 def csvzip(request):
     path =  os.path.join(settings.MEDIA_ROOT, 'files')
     datesuffix = datetime.datetime.now().strftime('_%Y_%m_%d')
@@ -89,7 +86,6 @@ def csvzip(request):
         messages.warning(request, "Error making the csv files")
         return HttpResponseRedirect('/')
 
-@require_GET
 def downloadzip(request,slug=None):
     f = get_object_or_404(zipcsvfile, slug=slug)
     link = f.path
@@ -101,7 +97,6 @@ def downloadzip(request,slug=None):
     f.save()
     return response
 
-@require_GET
 def deletezip(request,id):
     todel = get_object_or_404(zipcsvfile, id=id )
     todel.path.delete()
@@ -112,14 +107,15 @@ def deletezip(request,id):
                }
     return render(request, 'scoretable/download.html', context)
 
-@require_GET
 def upload_csv(request):
     if request.method == "POST":
         csvfile = request.FILES['csvfile']
         if not csvfile.name.endswith('.csv'):
-            messages.error(request, 'File is not CSV type')
+            messages.error(request, 'File is not CSV')
             return HttpResponseRedirect(reverse("scoretable:upload_csv"))
-        CSV_to_db(csvfile)
-        messages.success(request, "It worked!")
-        return HttpResponseRedirect('/')
+        if CSV_to_db(csvfile):
+            messages.success(request, "It worked!")
+            return HttpResponseRedirect('/')
+        else:
+            messages.error(request, "Something wrong happened. Better check the database...")
     return render(request, 'scoretable/uploadcsv.html', {'title':'Upload'})

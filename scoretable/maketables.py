@@ -11,89 +11,72 @@ def main():
 
 def WriteTables(tabletype):
     qgames = GameNumber.objects.filter(category=tabletype)
-    maxp = 0
     tranks = []
-    ranktable = {}
-    tottable = {}
+    tabledict = {}
     for game in qgames:
-        players = game.participant_set.all()
-        #get the max number of players
-        nplayers = len(players)
-        if nplayers > maxp:
-            maxp = nplayers
-        ranks = {}
-        for player in players:
-            ranks[str(player.player)] = player.rank
-            # build the summary_table
-            if str(player.player) in ranktable:
-                ranktable[str(player.player)].append(player.rank)
-                tottable[str(player.player)] += nplayers + 1 - player.rank
+        ranks = game.get_ranks()
+        points = game.get_points()
+
+        for p in ranks:
+            if p in tabledict:
+                tabledict[p]['ranks'].append(ranks[p])
+                tabledict[p]['points'] += points[p]
             else:
-                ranktable[str(player.player)] = [player.rank]
-                tottable[str(player.player)] = nplayers+1-player.rank
-        tranks.append([game.gamenumber, game.date.strftime("%Y-%m-%d"), game.time.strftime("%H:%M")] + _ranking(ranks, maxp))
-    st = _summary_table(ranktable, tottable, maxp)
-    maxplist = [str(i) for i in range(1, maxp + 1)]
+                tabledict[p] = {}
+                tabledict[p]['ranks']= [ranks[p]]
+                tabledict[p]['points'] = points[p]
+        tranks.append([game.gamenumber, game.date.strftime("%Y-%m-%d"), game.time.strftime("%H:%M")] + game.get_ranking())
+    st = _summary_table(tabledict)
+    maxplist = [str(i) for i in range(1, len(tabledict) + 1)]
     headerrank = ['#', 'Date', 'Time'] + maxplist
     headersummary = [' '] + maxplist + ['pts']
+    print(len(st))
     return (tranks,st, headerrank, headersummary,maxplist)
 
 def WriteScoreTables():
     qgames = GameNumber.objects.filter(category='BB')
-    maxp=0
     tbb = []
-
     # check for all players in qgames
     # is there a more efficient way of doing that?
     temp_psets = []
     for game in qgames:
-        players = game.participant_set.all()
-        temp_psets= temp_psets + [str(p.player) for p in players]
-
+        temp_psets= temp_psets + game.get_all_players()
     allplayers = list(set(temp_psets))
-
+    maxp = len(allplayers)
     for game in qgames:
-        players = game.participant_set.all()
-        nplayers = len(players)
-        if nplayers > maxp:
-            maxp = nplayers
-        totscore = 0
-        scores = {}
-        for player in players:
-            scores[str(player.player)]= player.score
-            totscore += player.score
-
-        #calculate the mean
-        m = "{0:0.2f}".format(totscore/nplayers)
-
-        tbb.append([game.gamenumber, game.date.strftime("%Y-%m-%d"), game.time.strftime("%H:%M")]+_bbranking(scores,allplayers)+[m])
-    ssbb = _scoressum_table(tbb,maxp)
-    #players_in_table = [p.name for p in qplayers]
+        # nplayers = game.get_number_of_players()
+        # if nplayers > maxp:
+        #     maxp = nplayers
+        scores = game.get_scores()
+        tbb.append([game.gamenumber, game.date.strftime("%Y-%m-%d"), game.time.strftime("%H:%M")]+_bbranking(scores,allplayers)+[game.get_bb_mean()])
+    ssbb = _scoressum_table(tbb,maxp,3) #3 for #, date and time
     headerscore = ['#', 'Date', 'Time'] + allplayers + ['Mean']
     headersumscore = [' '] + allplayers
     return (tbb, ssbb,headerscore, headersumscore, maxp)
 
-def _summary_table(r, t, m):
+def _summary_table(t):
     '''
-        -r is a dict with the position of the player in each game
-        such as {'PP': [1, 2, 3, 2], 'HH22': [2, 1, 2, 3], 'HH18': [3, 2, 1, 1]}
-        -t is a dict with the total points of all players such as
-        {'PP': 9, 'HH22': 9, 'HH18': 7, 'Red': 4}
-        -m is the max number of players in all the games
+        -t is a dict with the position (ranks) of the player in each game
+        and the total points for all players such as
+        {'PP': {'ranks': [2, 2, ... 2], 'points': 239},
+         'HH22': {'ranks': [1, 1,... 1], 'points': 231},
+          'HH18': {'ranks': [3, 3, ... 3], 'points': 222}}
         This function creates a summary table and the output will be a list of list such as:
             [[PP, 	41,	31,	32,	217],
             [HH22,	37,	31,	36,	209],
             [HH18,	29,	43,	32,	205]]
     '''
     result = []
-    for k in r:
-        result.append([k]+ [r[k].count(i) for i in range(1,1+m)] + [t[k]])
-    result.sort(key=lambda x: x[m+1], reverse=True)
+    for k in t:
+        result.append([k] + [t[k]['ranks'].count(i) for i in range(1, 1 + len(t))] + [t[k]['points']])
+    result.sort(key=lambda x: x[ len(t) + 1], reverse=True)
     return result
 
-def _scoressum_table(ll,m):
+def _scoressum_table(ll,m, n):
     '''
         ll is a list of lists from the build_table function
+        m is the number of individuals
+        n is the number of columns to skip
         This function will create a summary table with the average points
         for each player in all games.
         The output will be a list of list like:
@@ -101,7 +84,7 @@ def _scoressum_table(ll,m):
              [Mean	42	42	41],
              [STDev	6.32	6.4	5.83]]
     '''
-    temp = [list(_transpose(ll, 3+i)) for i in range(m)]
+    temp = [list(_transpose(ll, n+i)) for i in range(m)]
     result = [['Mean']+[0 for i in range(m)], ['STDev']+[0 for i in range(m)]]
     for i in range(0, m):
         cleaned_temp = list(filter(None, temp[i]))
@@ -120,23 +103,12 @@ def _transpose(ll,p):
     for l in ll:
         yield l[p]
 
-def _ranking(d, m):
-    """
-    Format the rank columns in the following style according to the
-    selected rank for each player and return a dictionary
-    PP	        HH22	HH18
-    PP+HH18		      HH22
-    m is the max number of players in all the games
-    """
-    return ['+'.join(p for p in d if d[p] == k) for k in range(1, m + 1)]
-
 def _bbranking(scores, players):
     """
-    Format the rank columns in the following style according to the
-    selected rank for each player and return a dictionary
-    PP	        HH22	HH18
-    PP+HH18		      HH22
-    m is the max number of players in all the games
+    Format the scores from the scores dict in the proper order of
+    all players in all games (players
+    Returns a list of the scores
+    [48, 47, None, 60]
     """
     result = [None for i in range(len(players))]
     for s in scores:
@@ -171,31 +143,33 @@ def CSV_to_db(f):
                         BB	     1	2016-03-04	23:34	46	47	42
     the three last columns contains the score/rank of PP HH22 and HH18
     """
-
-    file_data = f.read().decode("utf-8")
-
-    lines = file_data.split("\n")
-    # loop over the lines and save them in db. If error , store as string and then display
-    players = Player.objects.filter(active=True)
-    for line in lines:
-        fields = line.split(",")
-        if len(fields) > 1:
-            g = GameNumber(date=datetime.datetime.strptime(fields[2], "%Y-%m-%d").date(),
-                           time=datetime.datetime.strptime(fields[3], "%H:%M").time(),
-                           gamenumber= fields[1],
-                           category=fields[0])
-            g.save()
-            pscore = [fields[4+i] for i in range(0,3)]
-            if fields[0] == 'BB':
-                pranks = ranking(pscore)
-            else:
-                pranks = list(pscore)
-                pscore = [None for i in range(len(pscore))]
-            i = 0
-            for p in players:
-                s = Participant(game=g, rank=pranks[i], score=pscore[i],  player=p)
-                s.save()
-                i += 1
+    try:
+        file_data = f.read().decode("utf-8")
+        lines = file_data.split("\n")
+        # loop over the lines and save them in db. If error , store as string and then display
+        players = Player.objects.filter(active=True)
+        for line in lines:
+            fields = line.split(",")
+            if len(fields) > 1:
+                g = GameNumber(date=datetime.datetime.strptime(fields[2], "%Y-%m-%d").date(),
+                               time=datetime.datetime.strptime(fields[3], "%H:%M").time(),
+                               gamenumber= fields[1],
+                               category=fields[0])
+                g.save()
+                pscore = [fields[4+i] for i in range(0,3)]
+                if fields[0] == 'BB':
+                    pranks = ranking(pscore)
+                else:
+                    pranks = list(pscore)
+                    pscore = [None for i in range(len(pscore))]
+                i = 0
+                for p in players:
+                    s = Participant(game=g, rank=pranks[i], score=pscore[i],  player=p)
+                    s.save()
+                    i += 1
+        return (True)
+    except:
+        return (False)
 
 if __name__ == "__main__":
     main()
