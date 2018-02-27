@@ -9,4 +9,5 @@ class GameNumberAdmin(admin.ModelAdmin):
     inlines = [ParticipantInline]
 
 admin.site.register(GameNumber, GameNumberAdmin)
+admin.site.register(Participant)
 

@@ -11,12 +11,11 @@ def main():
 
 def WriteTables(tabletype):
     qgames = GameNumber.objects.filter(category=tabletype)
-    tranks = []
+    tranks = {}
     tabledict = {}
     for game in qgames:
         ranks = game.get_ranks()
         points = game.get_points()
-
         for p in ranks:
             if p in tabledict:
                 tabledict[p]['ranks'].append(ranks[p])
@@ -25,31 +24,28 @@ def WriteTables(tabletype):
                 tabledict[p] = {}
                 tabledict[p]['ranks']= [ranks[p]]
                 tabledict[p]['points'] = points[p]
-        tranks.append([game.gamenumber, game.date.strftime("%Y-%m-%d"), game.time.strftime("%H:%M")] + game.get_ranking())
+        tranks[game.id] = [game.date.strftime("%Y-%m-%d"), game.time.strftime("%H:%M")] + game.get_ranking()
     st = _summary_table(tabledict)
     maxplist = [str(i) for i in range(1, len(tabledict) + 1)]
     headerrank = ['#', 'Date', 'Time'] + maxplist
     headersummary = [' '] + maxplist + ['pts']
-    print(len(st))
     return (tranks,st, headerrank, headersummary,maxplist)
 
 def WriteScoreTables():
     qgames = GameNumber.objects.filter(category='BB')
-    tbb = []
+    tbb = {}
     # check for all players in qgames
     # is there a more efficient way of doing that?
     temp_psets = []
     for game in qgames:
-        temp_psets= temp_psets + game.get_all_players()
+        temp_psets= temp_psets + game.get_all_pnames()
     allplayers = list(set(temp_psets))
     maxp = len(allplayers)
     for game in qgames:
-        # nplayers = game.get_number_of_players()
-        # if nplayers > maxp:
-        #     maxp = nplayers
         scores = game.get_scores()
-        tbb.append([game.gamenumber, game.date.strftime("%Y-%m-%d"), game.time.strftime("%H:%M")]+_bbranking(scores,allplayers)+[game.get_bb_mean()])
-    ssbb = _scoressum_table(tbb,maxp,3) #3 for #, date and time
+        tbb[game.id] = [game.date.strftime("%Y-%m-%d"), game.time.strftime("%H:%M")]+_bbranking(scores,allplayers)+[game.get_bb_mean()]
+
+    ssbb = _scoressum_table_new(tbb,maxp,2) #2 for date and time
     headerscore = ['#', 'Date', 'Time'] + allplayers + ['Mean']
     headersumscore = [' '] + allplayers
     return (tbb, ssbb,headerscore, headersumscore, maxp)
@@ -72,25 +68,49 @@ def _summary_table(t):
     result.sort(key=lambda x: x[ len(t) + 1], reverse=True)
     return result
 
-def _scoressum_table(ll,m, n):
+def _scoressum_table_new(dict, m, n):
     '''
-        ll is a list of lists from the build_table function
+        dict is a dict from the build_table function
         m is the number of individuals
         n is the number of columns to skip
-        This function will create a summary table with the average points
-        for each player in all games.
+        This function will create a summary table with the average weigths
+        for each cat in all measurements.
         The output will be a list of list like:
             [[''   	PP	HH18	HH22],
              [Mean	42	42	41],
              [STDev	6.32	6.4	5.83]]
     '''
-    temp = [list(_transpose(ll, n+i)) for i in range(m)]
+    temp = [[] for i in range(m+1)]
+    for key, value in dict.items():
+        for i, v in enumerate(value[n:]):
+            temp[i].append(v)
     result = [['Mean']+[0 for i in range(m)], ['STDev']+[0 for i in range(m)]]
+
     for i in range(0, m):
         cleaned_temp = list(filter(None, temp[i]))
         result[0][i + 1] = "{0:0.2f}".format(mean(cleaned_temp))
         result[1][i + 1] = "{0:0.2f}".format(pstdev(cleaned_temp))
     return result
+
+# def _scoressum_table(ll,m, n):
+#     '''
+#         ll is a list of lists from the build_table function
+#         m is the number of individuals
+#         n is the number of columns to skip
+#         This function will create a summary table with the average points
+#         for each player in all games.
+#         The output will be a list of list like:
+#             [[''   	PP	HH18	HH22],
+#              [Mean	42	42	41],
+#              [STDev	6.32	6.4	5.83]]
+#     '''
+#     temp = [list(_transpose(ll, n+i)) for i in range(m)]
+#     result = [['Mean']+[0 for i in range(m)], ['STDev']+[0 for i in range(m)]]
+#     for i in range(0, m):
+#         cleaned_temp = list(filter(None, temp[i]))
+#         result[0][i + 1] = "{0:0.2f}".format(mean(cleaned_temp))
+#         result[1][i + 1] = "{0:0.2f}".format(pstdev(cleaned_temp))
+#     return result
 
 def _transpose(ll,p):
     '''

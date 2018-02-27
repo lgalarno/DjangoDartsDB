@@ -9,14 +9,28 @@
         <table class="table">
           <thead>
             <tr>
+            <th scope="col"></th>
                 {% for s in headerrank %}
                     <th scope="col">{{ s }}</th>
                 {% endfor %}
             </tr>
           </thead>
             <tbody>
-            {% for r in maintable %}
+            {% for k, r in maintable.items %}
                 <tr>
+                    <td>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <a href="{% url "scoretable:deletegame" k %}" class="btn btn-light btn-sm" role="button" onclick="return confirm('Are you sure?')">
+                                    <i class="far fa-trash-alt" title="delete" aria-hidden="true"></i>
+                                </a>
+                                <a href="{% url "scoretable:editgame" k %}" class="btn btn-light btn-sm" role="button">
+                                    <i class="fas fa-edit" title="edit" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </td>
+                <td>{{ forloop.counter }}</td>
                     {% for s in r %}
                         <td>{{ s }}</td>
                     {% endfor %}

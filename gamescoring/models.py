@@ -16,6 +16,8 @@ class GameNumber(models.Model):
     def __str__(self):
         return "{0}-{1}".format(self.date, self.time)
     def get_all_players(self):
+        return [player.player for player in self.participant_set.all()]
+    def get_all_pnames(self):
         return [player.player.name for player in self.participant_set.all()]
     def get_number_of_players(self):
         return len(self.get_all_players())
@@ -40,7 +42,6 @@ class GameNumber(models.Model):
         """
         d = self.get_ranks()
         return ['+'.join(p for p in d if d[p] == k) for k in range(1, self.get_number_of_players() + 1)]
-
 
 class Participant(models.Model):
     score       = models.IntegerField(null=True,blank=True)

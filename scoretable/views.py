@@ -1,8 +1,8 @@
 from django.conf import settings
 from django.contrib import messages
-from django.http import Http404
 from django.utils.encoding import smart_str
-from django.shortcuts import render, HttpResponseRedirect,HttpResponse, get_object_or_404, reverse
+from django.shortcuts import render, HttpResponseRedirect,HttpResponse, get_object_or_404, redirect, reverse
+from django.views.generic import View
 from django.views.decorators.http import require_POST, require_GET
 
 import zipfile
@@ -10,6 +10,8 @@ import datetime
 import os
 import csv
 
+from gamescoring.models import GameNumber, Participant
+from gamescoring.backend import ranking
 from .models import zipcsvfile
 from .maketables import WriteTables, WriteScoreTables, Write_csv, CSV_to_db
 
@@ -97,13 +99,56 @@ def downloadzip(request,slug=None):
     f.save()
     return response
 
+def editgame(request,id):
+    if request.method == "GET":
+        q = get_object_or_404(GameNumber, id=id )
+        # category = q.category
+        # players = q.get_all_players()
+
+        context = {'title':'Edit',
+                   'game': q}
+        return render(request, 'scoretable/edit.html', context)
+    if request.method == "POST":
+        g = get_object_or_404(GameNumber, id=id)
+        try:
+            requestdict = dict(request.POST)
+            selectedplayers = requestdict.get('selectp')
+            todb = dict.fromkeys(requestdict.get('selectp'))
+            if g.category == 'BB':
+                pscores = requestdict.get('pscore')
+                pranks = ranking(pscores)
+            else:
+                pranks = requestdict.get('prank')
+                pscores = [None for i in range(len(pranks))]
+            z = zip(selectedplayers,pranks,pscores)
+            todb = {p:{'rank':int(r),'score':int(s)} for p,r,s in z}
+            for p in g.participant_set.all():
+                if p.rank != todb[p.player.name]['rank']:
+                    q = Participant.objects.get(game=g, player=p.player)
+                    q.rank =  todb[p.player.name]['rank']
+                    q.save()
+                if p.score != todb[p.player.name]['score']:
+                    q = Participant.objects.get(game=g, player=p.player)
+                    q.score =  todb[p.player.name]['score']
+                    q.save()
+            return redirect('scoretable:editgame', id=g.id)
+        except:
+            messages.warning(request, "Sorry, something wrong happened entering data in the database")
+            return HttpResponseRedirect('/')
+
+def deletegame(request,id):
+    q = get_object_or_404(GameNumber, id=id )
+    gcat = q.category
+    #todel.delete()
+    return HttpResponseRedirect(reverse("scoretable:webtables", kwargs={'category':gcat}))
+
 def deletezip(request,id):
-    todel = get_object_or_404(zipcsvfile, id=id )
-    todel.path.delete()
-    todel.delete()
-    allfiles = zipcsvfile.objects.all().order_by("-timestamp")
+    q = get_object_or_404(zipcsvfile, id=id )
+    q.path.delete()
+    q.delete()
+    qs = zipcsvfile.objects.all().order_by("-timestamp")
     context = {'title': 'Download',
-               'allfiles': allfiles
+               'allfiles': qs
                }
     return render(request, 'scoretable/download.html', context)
 

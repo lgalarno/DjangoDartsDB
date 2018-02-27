@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+    <h2>{{ game.category }}</h2>
+    {% if game %}
+        <form action="{% url 'scoretable:editgame' game.id %}" method="post">
+            {% csrf_token %}
+            <div class="row">
+                <div>
+                    {% for p in game.participant_set.all %}
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <input type="text" name="selectp" id="selectp-{{ p.player.id }}" value="{{ p.player.name }}" readonly>
+                        </div>
+                    </div>
+                            {% if game.category == '501' %}
+                                <select  name="prank" id="prank-{{ p.id }}">
+                                    {% for n in game.participant_set.all %}
+                                        <option value="{{ forloop.counter }}" {% if p.rank == forloop.counter %}selected='selected'{% endif %}>
+                                            {{ forloop.counter }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+
+                            {% elif game.category == 'BB' %}
+                                <input  type="number" min="0" max="198" required value="{{ p.score }}" name='pscore' id="pscore-{{ p.id }}">
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    <input type="submit" class="btn btn-success" value="Save"/>
+                </div>
+            </div>
+        </form>
+    {% endif %}
+{% endblock %}

@@ -1,12 +1,13 @@
 from django.utils import timezone
 from django.contrib import messages
-from django.shortcuts import render, HttpResponseRedirect
+from django.shortcuts import render, HttpResponseRedirect, reverse
 from django.views.decorators.http import require_POST
 from PlayersManagement.models import Player
 
 from .backend import ranking
 from .models import GameNumber,Participant
 
+#get or post?
 def EnterScore(request,category=None):
     if category in ['BB','501']:
         players = Player.objects.filter(active=True)
