@@ -13,7 +13,9 @@ def WriteTables(tabletype):
     qgames = GameNumber.objects.filter(category=tabletype)
     tranks = {}
     tabledict = {}
+    gn = 0
     for game in qgames:
+        gn += 1
         ranks = game.get_ranks()
         points = game.get_points()
         for p in ranks:
@@ -24,7 +26,7 @@ def WriteTables(tabletype):
                 tabledict[p] = {}
                 tabledict[p]['ranks']= [ranks[p]]
                 tabledict[p]['points'] = points[p]
-        tranks[game.id] = [game.date.strftime("%Y-%m-%d"), game.time.strftime("%H:%M")] + game.get_ranking()
+        tranks[game.id] = [gn, game.date.strftime("%Y-%m-%d"), game.time.strftime("%H:%M")] + game.get_ranking()
     st = _summary_table(tabledict)
     maxplist = [str(i) for i in range(1, len(tabledict) + 1)]
     headerrank = ['#', 'Date', 'Time'] + maxplist
@@ -41,11 +43,13 @@ def WriteScoreTables():
         temp_psets= temp_psets + game.get_all_pnames()
     allplayers = list(set(temp_psets))
     maxp = len(allplayers)
+    gn = 0
     for game in qgames:
+        gn += 1
         scores = game.get_scores()
-        tbb[game.id] = [game.date.strftime("%Y-%m-%d"), game.time.strftime("%H:%M")]+_bbranking(scores,allplayers)+[game.get_bb_mean()]
+        tbb[game.id] = [gn, game.date.strftime("%Y-%m-%d"), game.time.strftime("%H:%M")]+_bbranking(scores,allplayers)+[game.get_bb_mean()]
 
-    ssbb = _scoressum_table_new(tbb,maxp,2) #2 for date and time
+    ssbb = _scoressum_table(tbb,maxp,3) #2 for #, date and time
     headerscore = ['#', 'Date', 'Time'] + allplayers + ['Mean']
     headersumscore = [' '] + allplayers
     return (tbb, ssbb,headerscore, headersumscore, maxp)
@@ -68,7 +72,7 @@ def _summary_table(t):
     result.sort(key=lambda x: x[ len(t) + 1], reverse=True)
     return result
 
-def _scoressum_table_new(dict, m, n):
+def _scoressum_table(dict, m, n):
     '''
         dict is a dict from the build_table function
         m is the number of individuals
@@ -91,26 +95,6 @@ def _scoressum_table_new(dict, m, n):
         result[0][i + 1] = "{0:0.2f}".format(mean(cleaned_temp))
         result[1][i + 1] = "{0:0.2f}".format(pstdev(cleaned_temp))
     return result
-
-# def _scoressum_table(ll,m, n):
-#     '''
-#         ll is a list of lists from the build_table function
-#         m is the number of individuals
-#         n is the number of columns to skip
-#         This function will create a summary table with the average points
-#         for each player in all games.
-#         The output will be a list of list like:
-#             [[''   	PP	HH18	HH22],
-#              [Mean	42	42	41],
-#              [STDev	6.32	6.4	5.83]]
-#     '''
-#     temp = [list(_transpose(ll, n+i)) for i in range(m)]
-#     result = [['Mean']+[0 for i in range(m)], ['STDev']+[0 for i in range(m)]]
-#     for i in range(0, m):
-#         cleaned_temp = list(filter(None, temp[i]))
-#         result[0][i + 1] = "{0:0.2f}".format(mean(cleaned_temp))
-#         result[1][i + 1] = "{0:0.2f}".format(pstdev(cleaned_temp))
-#     return result
 
 def _transpose(ll,p):
     '''
@@ -148,7 +132,7 @@ def Write_csv(h1, l1, h2, l2):
     mem_file = io.StringIO()
     csv_writer = csv.writer(mem_file)
     csv_writer.writerow(h1)
-    csv_writer.writerows(l1)
+    csv_writer.writerows(l1.values())
     csv_writer.writerows([''])
     csv_writer.writerow(h2)
     csv_writer.writerows(l2)

@@ -5,6 +5,7 @@ db.sqlite3
 dartsDBweb/settings/local.py
 dartsDBweb/settings/secrets.py
 .idea
+.env.*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -1,5 +1,3 @@
-
-
 def ranking(scores):
     """
     scores is a list of the score such as:['33', '44', '55']

@@ -2,8 +2,6 @@ from django.conf import settings
 from django.contrib import messages
 from django.utils.encoding import smart_str
 from django.shortcuts import render, HttpResponseRedirect,HttpResponse, get_object_or_404, redirect, reverse
-from django.views.generic import View
-from django.views.decorators.http import require_POST, require_GET
 
 import zipfile
 import datetime
@@ -28,7 +26,7 @@ def csvweb(request, category=None):
     response['Content-Disposition'] = 'attachment; filename="{}.csv"'.format(category)
     writer = csv.writer(response)
     writer.writerow(headerrank)
-    writer.writerows(rtable)
+    writer.writerows(rtable.values())
     writer.writerows([''])
     writer.writerow(headersummary)
     writer.writerows(stable)
