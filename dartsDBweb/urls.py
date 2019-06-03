@@ -5,6 +5,8 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import include, path
 from django.views.generic import TemplateView
 
+from PlayersManagement.views import license_check
+
 app_name = 'dartsDBweb'
 
 urlpatterns = [
@@ -15,6 +17,7 @@ urlpatterns = [
     path('PlayersManagement/', include('PlayersManagement.urls', namespace ="PlayersManagement")),
     path('score/', include('gamescoring.urls', namespace ="gamescoring")),
     path('table/', include('scoretable.urls', namespace ="scoretable")),
+    path('activations/<username>/', license_check, name="activations"),
 ]
 
 if settings.DEBUG:
