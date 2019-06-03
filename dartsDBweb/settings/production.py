@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'gamescoring',
     'scoretable',
     'PlayersManagement',
+    'graphpad_lic_check',
 ]
 
 MIDDLEWARE = [
