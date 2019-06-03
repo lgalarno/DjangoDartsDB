@@ -1,0 +1,6 @@
+#content a {
+    color: black;
+}
+#content a:hover {
+    color: darkgray;
+}
