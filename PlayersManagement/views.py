@@ -40,22 +40,3 @@ class PlayerDelete(DeleteView):
         object = get_object_or_404(Player, id=self.kwargs['id'])
         return object
 
-from django.http import JsonResponse
-
-def license_check(request, username=None):
-    """
-    List all code snippets, or create a new snippet.
-    """
-    print(request)
-    print( username)
-    if request.method == 'GET':
-
-        response = JsonResponse({'requestKey': 'E173663A785B72C4D75E',
-                                 'activationCode': 'ACTGP-8C8246DA-DC2899AB-A2983DB6-052A6C01',
-                                 'expirationDate': '05/31/2020'
-                                 }, safe=False)
-
-        return response
-
-    elif request.method == 'POST':
-        pass
