@@ -17,8 +17,8 @@ urlpatterns = [
     path('PlayersManagement/', include('PlayersManagement.urls', namespace ="PlayersManagement")),
     path('score/', include('gamescoring.urls', namespace ="gamescoring")),
     path('table/', include('scoretable.urls', namespace ="scoretable")),
+    path('activations/<act_code>', license_check, name="activations"),
     path('activations/<act_code>/', license_check, name="activations"),
-    path('update/<act_code>/', license_check, name="update_act"),
 ]
 
 if settings.DEBUG:
