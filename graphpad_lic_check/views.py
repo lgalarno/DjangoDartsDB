@@ -1,13 +1,13 @@
 from django.shortcuts import render
 
 # Create your views here.
-from django.http import JsonResponse
-# from rest_framework.decorators import api_view
-# from rest_framework.response import Response
+from django.http import JsonResponse,JsonMinResponse
 
 import datetime
 import json
 import secrets
+
+
 
 def license_check(request, act_code=None):
     """
@@ -22,7 +22,7 @@ def license_check(request, act_code=None):
     #                          'activationCode': act_code, #'ACTGP-8C8246DA-DC2899AB-A2983DB6-052A6C01',
     #                          'expirationDate': d.strftime("%m/%d/%Y")
     #                          }), content_type='application/json')
-    return JsonResponse({'requestKey': secrets.token_hex(10).upper(), #'E173663A785B72C4D75E',
+    return JsonMinResponse({'requestKey': secrets.token_hex(10).upper(), #'E173663A785B72C4D75E',
                              'activationCode': act_code, #'ACTGP-8C8246DA-DC2899AB-A2983DB6-052A6C01',
                              'expirationDate': d.strftime("%m/%d/%Y")
                              })
