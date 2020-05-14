@@ -10,12 +10,12 @@ def main():
     WriteTables('501')
 
 def WriteTables(tabletype):
-    qgames = GameNumber.objects.filter(category=tabletype)
+    qgames = GameNumber.objects.filter(category=tabletype).order_by('-gamenumber')
     tranks = {}
     tabledict = {}
-    gn = 0
+    gn = len(qgames)+1
     for game in qgames:
-        gn += 1
+        gn -= 1
         ranks = game.get_ranks()
         points = game.get_points()
         for p in ranks:
@@ -34,7 +34,7 @@ def WriteTables(tabletype):
     return (tranks,st, headerrank, headersummary,maxplist)
 
 def WriteScoreTables():
-    qgames = GameNumber.objects.filter(category='BB')
+    qgames = GameNumber.objects.filter(category='BB').order_by('-gamenumber')
     tbb = {}
     # check for all players in qgames
     # is there a more efficient way of doing that?
@@ -43,9 +43,9 @@ def WriteScoreTables():
         temp_psets= temp_psets + game.get_all_pnames()
     allplayers = list(set(temp_psets))
     maxp = len(allplayers)
-    gn = 0
+    gn = len(qgames)+1
     for game in qgames:
-        gn += 1
+        gn -= 1
         scores = game.get_scores()
         tbb[game.id] = [gn, game.date.strftime("%Y-%m-%d"), game.time.strftime("%H:%M")]+_bbranking(scores,allplayers)+[game.get_bb_mean()]
 
