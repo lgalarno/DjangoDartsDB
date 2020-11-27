@@ -23,7 +23,7 @@ def csvweb(request, category=None):
         return HttpResponseRedirect('/')
     # Create the HttpResponse object with the appropriate CSV header.
     response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="{}.csv"'.format(category)
+    response['Content-Disposition'] = f'attachment; filename="{category}.csv"'
     writer = csv.writer(response)
     writer.writerow(headerrank)
     writer.writerows(rtable.values())
@@ -43,7 +43,7 @@ def webtables(request, category=None):
     else:
         messages.warning(request, "Nothing to do")
         return HttpResponseRedirect('/')
-    context = {'title':'DartsTables{}'.format(category),
+    context = {'title':f'DartsTables{category}',
                'maxplist': maxplist,
                'headerrank':headerrank,
                'headersummary':headersummary,
@@ -57,13 +57,14 @@ def csvzip(request):
     datesuffix = datetime.datetime.now().strftime('_%Y_%m_%d')
     zipfilename = 'DartsTablesCSV' + datesuffix + '.zip'
     longzipfilename = os.path.join(path, zipfilename)
-    try:
+    # try:
+    if datesuffix:
         zip_archive = zipfile.ZipFile(longzipfilename, 'w')
 
         for tabletype in ['501', 'BB']:
             rtable, stable, headerrank, headersummary, maxplist = WriteTables(tabletype)
             if len(rtable) > 0:
-                outfile = 'DartsTables{}'.format(tabletype) + datesuffix + '.csv'
+                outfile = f'DartsTables{tabletype}' + datesuffix + '.csv'
                 mf = Write_csv(headerrank, rtable, headersummary, stable)
                 zip_archive.writestr(outfile, mf.read())
         if len(rtable) > 0:
@@ -82,16 +83,16 @@ def csvzip(request):
                    'allfiles':allfiles
                    }
         return render(request, 'scoretable/download.html', context)
-    except:
-        messages.warning(request, "Error making the csv files")
-        return HttpResponseRedirect('/')
+    # except:
+    #     messages.warning(request, "Error making the csv files")
+    #     return HttpResponseRedirect('/')
 
 def downloadzip(request,slug=None):
     f = get_object_or_404(zipcsvfile, slug=slug)
     link = f.path
     response = HttpResponse()
     response['Content-Type']='application/zip'
-    response['Content-Disposition'] = "attachment; filename='{}'".format(f.filename)
+    response['Content-Disposition'] = f"attachment; filename='{f.filename}'"
     response['X-Sendfile']= smart_str(link)
     f.timesdownloaded += 1
     f.save()

@@ -5,8 +5,6 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import include, path
 from django.views.generic import TemplateView
 
-from graphpad_lic_check.views import license_check
-
 app_name = 'dartsDBweb'
 
 urlpatterns = [
@@ -17,8 +15,6 @@ urlpatterns = [
     path('PlayersManagement/', include('PlayersManagement.urls', namespace ="PlayersManagement")),
     path('score/', include('gamescoring.urls', namespace ="gamescoring")),
     path('table/', include('scoretable.urls', namespace ="scoretable")),
-    path('activations/<act_code>', license_check, name="activations"),
-    path('activations/<act_code>/', license_check, name="activations"),
 ]
 
 if settings.DEBUG:

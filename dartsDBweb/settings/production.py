@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     'gamescoring',
     'scoretable',
     'PlayersManagement',
-    'graphpad_lic_check',
 ]
 
 MIDDLEWARE = [
@@ -126,9 +125,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = '/static_dev/'
 # STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR, "static"),
+#     os.path.join(BASE_DIR, "static_dev"),
 # ]
 MEDIA_URL = '/media/'
 STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static")
