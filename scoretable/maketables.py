@@ -6,8 +6,10 @@ from PlayersManagement.models import Player
 from gamescoring.models import GameNumber,Participant
 from gamescoring.backend import ranking
 
+
 def main():
     WriteTables('501')
+
 
 def WriteTables(tabletype):
     qgames = GameNumber.objects.filter(category=tabletype).order_by('-gamenumber')
@@ -33,6 +35,7 @@ def WriteTables(tabletype):
     headersummary = [' '] + maxplist + ['pts']
     return (tranks,st, headerrank, headersummary,maxplist)
 
+
 def WriteScoreTables():
     qgames = GameNumber.objects.filter(category='BB').order_by('-gamenumber')
     tbb = {}
@@ -54,6 +57,7 @@ def WriteScoreTables():
     headersumscore = [' '] + allplayers
     return (tbb, ssbb,headerscore, headersumscore, maxp)
 
+
 def _summary_table(t):
     '''
         -t is a dict with the position (ranks) of the player in each game
@@ -71,6 +75,7 @@ def _summary_table(t):
         result.append([k] + [t[k]['ranks'].count(i) for i in range(1, 1 + len(t))] + [t[k]['points']])
     result.sort(key=lambda x: x[ len(t) + 1], reverse=True)
     return result
+
 
 def _scoressum_table(dict, m, n):
     '''
@@ -96,6 +101,7 @@ def _scoressum_table(dict, m, n):
         result[1][i + 1] = "{0:0.2f}".format(pstdev(cleaned_temp))
     return result
 
+
 def _transpose(ll,p):
     '''
         This function will transpose the elements of a peculiar position
@@ -106,6 +112,7 @@ def _transpose(ll,p):
     '''
     for l in ll:
         yield l[p]
+
 
 def _bbranking(scores, players):
     """
@@ -118,6 +125,7 @@ def _bbranking(scores, players):
     for s in scores:
         result[players.index(s)]=scores[s]
     return result
+
 
 def Write_csv(h1, l1, h2, l2):
     """
@@ -139,6 +147,7 @@ def Write_csv(h1, l1, h2, l2):
     csv_writer.writerows([''])
     mem_file.seek(0)
     return mem_file
+
 
 def CSV_to_db(f):
     """
@@ -174,6 +183,7 @@ def CSV_to_db(f):
         return (True)
     except:
         return (False)
+
 
 if __name__ == "__main__":
     main()

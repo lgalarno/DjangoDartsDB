@@ -22,19 +22,11 @@
                         </div>
                     </div>
                     {% if gamecategory == '501' %}
-                        <select  name="pscore" id="pscore-{{ player.id }}"></select>
+                        <select name="pscore" id="pscore-{{ player.id }}"></select>
                     {% elif gamecategory == 'BB' %}
                         <input  type="number" min="0" max="198" required value="0" name='pscore' id="pscore-{{ player.id }}" >
                     {% endif %}
                 </div>
-{#                <input type="checkbox" name="selectp" id="selectp-{{ player.id }}" value="{{ player.id }}" onclick="disableSelect(this.id)" checked/>#}
-{#                <label for="selectp-{{ player.id }}" style="width: 100px">{{ player.name }}</label>#}
-{#                {% if gamecategory == '501' %}#}
-{#                    <select  name="pscore" id="pscore-{{ player.id }}"></select>#}
-{#                {% elif gamecategory == 'BB' %}#}
-{#                    <input  type="number" min="0" max="198" required value="0" name='pscore' id="pscore-{{ player.id }}" >#}
-{#                {% endif %}#}
-
             {% endfor %}
         <input type="submit" class="btn btn-success" value="GO"/>
         </div>

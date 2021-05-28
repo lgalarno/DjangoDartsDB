@@ -5,8 +5,10 @@ from django.utils.text import slugify
 
 import os
 
+
 def upload_location(instance, filename):
-    return "{0}/{1}".format(instance, filename)
+    return f"{instance}/{filename}"
+
 
 # Create your models here.
 class Player(models.Model):
@@ -31,6 +33,7 @@ class Player(models.Model):
             self.slug = slugify(self.name)
         super(Player, self).save(*args, **kwargs)
 
+
 @receiver(models.signals.post_delete, sender=Player)
 def auto_delete_file_on_delete(sender, instance, **kwargs):
     """
@@ -40,6 +43,7 @@ def auto_delete_file_on_delete(sender, instance, **kwargs):
     if instance.picture:
         if os.path.isfile(instance.picture.path):
             os.remove(instance.picture.path)
+
 
 @receiver(models.signals.pre_save, sender=Player)
 def auto_delete_file_on_change(sender, instance, **kwargs):
@@ -56,7 +60,11 @@ def auto_delete_file_on_change(sender, instance, **kwargs):
     except Player.DoesNotExist:
         return False
 
+
+# TODO make it better...
     new_picture = instance.picture
+    if not bool(old_picture):
+        return False
     if not old_picture == new_picture:
         if os.path.isfile(old_picture.path):
             os.remove(old_picture.path)

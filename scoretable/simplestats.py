@@ -3,6 +3,7 @@ Created on Mon Dec 19 04:57:13 2016
 @author: Luc Galarneau
 """
 
+
 def mean(data):
     """Return the sample arithmetic mean of data."""
     n = len(data)
@@ -16,6 +17,7 @@ def _ss(data):
     c = mean(data)
     ss = sum((x - c) ** 2 for x in data)
     return ss
+
 
 def pstdev(data):
     """Calculates the population standard deviation."""

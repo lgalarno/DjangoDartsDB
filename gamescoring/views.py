@@ -11,6 +11,7 @@ from .backend import ranking
 from .forms import Participant501FormSet,ParticipantBBFormSet
 from .models import GameNumber,Participant
 
+
 #get or post?
 class NewScore(CreateView):
     model = GameNumber
@@ -37,6 +38,7 @@ class NewScore(CreateView):
         return super(NewScore, self).form_valid(form)
     #return HttpResponse('Get Score')
 
+
 #get or post?
 def EnterScore(request,category=None):
     if category in ['BB','501']:
@@ -47,6 +49,7 @@ def EnterScore(request,category=None):
     else:
         messages.warning(request, "Nothing to do")
         return HttpResponseRedirect('/')
+
 
 @require_POST
 def ScoreConfirm(request):
@@ -73,6 +76,7 @@ def ScoreConfirm(request):
         return render(request, 'gamescoring/ScoreConfirm.html', context)
     messages.warning(request, "No player(s) selected!")
     return HttpResponseRedirect('/')
+
 
 @require_POST
 def SaveScore(request):

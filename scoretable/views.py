@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib import messages
 from django.utils.encoding import smart_str
-from django.shortcuts import render, HttpResponseRedirect,HttpResponse, get_object_or_404, redirect, reverse
+from django.shortcuts import render, HttpResponseRedirect, HttpResponse, get_object_or_404, redirect, reverse
 
 import zipfile
 import datetime
@@ -12,6 +12,7 @@ from gamescoring.models import GameNumber, Participant
 from gamescoring.backend import ranking
 from .models import zipcsvfile
 from .maketables import WriteTables, WriteScoreTables, Write_csv, CSV_to_db
+
 
 def csvweb(request, category=None):
     if category in ['501','BB']:
@@ -33,6 +34,7 @@ def csvweb(request, category=None):
     writer.writerows([''])
     return response
 
+
 def webtables(request, category=None):
     if category in ['501', 'BB']:
         rtable, stable, headerrank, headersummary, maxplist = WriteTables(category)
@@ -51,6 +53,7 @@ def webtables(request, category=None):
                'summarytable':stable,
                'stable_title': stable_title}
     return render(request, 'scoretable/table.html', context)
+
 
 def csvzip(request):
     path =  os.path.join(settings.MEDIA_ROOT, 'files')
@@ -87,6 +90,7 @@ def csvzip(request):
     #     messages.warning(request, "Error making the csv files")
     #     return HttpResponseRedirect('/')
 
+
 def downloadzip(request,slug=None):
     f = get_object_or_404(zipcsvfile, slug=slug)
     link = f.path
@@ -97,6 +101,7 @@ def downloadzip(request,slug=None):
     f.timesdownloaded += 1
     f.save()
     return response
+
 
 def editgame(request,id):
     if request.method == "GET":
@@ -135,11 +140,13 @@ def editgame(request,id):
             messages.warning(request, "Sorry, something wrong happened entering data in the database")
             return HttpResponseRedirect('/')
 
+
 def deletegame(request,id):
     q = get_object_or_404(GameNumber, id=id )
     gcat = q.category
     #todel.delete()
     return HttpResponseRedirect(reverse("scoretable:webtables", kwargs={'category':gcat}))
+
 
 def deletezip(request,id):
     q = get_object_or_404(zipcsvfile, id=id )
@@ -150,6 +157,7 @@ def deletezip(request,id):
                'allfiles': qs
                }
     return render(request, 'scoretable/download.html', context)
+
 
 def upload_csv(request):
     if request.method == "POST":
