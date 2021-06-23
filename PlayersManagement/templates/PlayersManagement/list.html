@@ -15,16 +15,16 @@
             <div class="card-body">
                 <h5 class="card-title"><a class="" href="{{ player.get_absolute_url }}" title="Detail">{{ player.name }}</a></h5>
                 <!-- View Details -->
-                <a href="{{ player.get_absolute_url }}" class="btn btn-secondary btn-sm" role="button">
-                    <i class="fas fa-info-circle" title="Detail"></i>Detail
+                <a href="{{ player.get_absolute_url }}" role="button">
+                    <i class="fas fa-info-circle" title="Detail"></i> Detail
                 </a>
                 <!-- Update Player -->
-                <a href="{% url 'PlayersManagement:UpdatePlayer' id=player.id slug=player.slug %}" class="btn btn-secondary btn-sm" role="button">
-                    <i class="fas fa-edit" title="Edit"></i>Edit
+                <a href="{% url 'PlayersManagement:UpdatePlayer' id=player.id slug=player.slug %}"role="button">
+                    <i class="fas fa-edit" title="Edit"></i> Edit
                 </a>
                 <!-- Delete Player -->
-                <a href="{% url 'PlayersManagement:DeletePlayer' id=player.id slug=player.slug %}" class="btn btn-secondary btn-sm" role="button">
-                    <i class="fas fa-trash-alt" title="Delete"></i>Delete
+                <a href="{% url 'PlayersManagement:DeletePlayer' id=player.id slug=player.slug %}" role="button">
+                    <i class="fas fa-trash-alt" title="Delete"></i> Delete
                 </a>
             </div>
         </div>
@@ -32,8 +32,8 @@
 {% endif %}
 <!-- Add Player -->
 <div class="col">
-    <a href="{% url 'PlayersManagement:CreatePlayer' %}" class="btn btn-secondary" role="button">
-        <i class="fas fa-plus-square fa-w-14" title="Add a New Player"></i>Add
+    <a href="{% url 'PlayersManagement:CreatePlayer' %}" role="button">
+        <i class="fas fa-plus-square fa-w-14" title="Add a New Player"></i> Add new darts
     </a>
 </div>
 </div>

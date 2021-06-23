@@ -1,42 +1,47 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load crispy_forms_tags %}
 
 {% block title %}{{ gamecategory }}{% endblock %}
 
 {% block content %}
-    <h2>{{ gamecategory }}</h2>
-    <p>Select the players, enter the ranks then press 'GO'</p>
-
-    {% if players %}
-    <form action="{% url 'gamescoring:ScoreConfirm' %}" method="post">
-    {% csrf_token %}
-    <input type="hidden" name="gamecategory" value="{{ gamecategory }}"/>
     <div class="row">
-        <div>
-            {% for player in players %}
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">
-                            <input type="checkbox" name="selectp" id="selectp-{{ player.id }}" value="{{ player.id }}" onclick="disableSelect(this.id)" checked>
-                            <label for="selectp-{{ player.id }}" style="width: 100px">{{ player.name }}</label>
-                        </div>
+        <div class="col">
+            <h2>{{ gamecategory }}</h2>
+            <p>Select the players, enter the ranks then press 'GO'</p>
+
+            {% if players %}
+            <form action="{% url 'gamescoring:ScoreConfirm' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="gamecategory" id="gamecategory" value="{{ gamecategory }}"/>
+                    <div>
+                        {% for player in players %}
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <input type="checkbox" name="selectp" id="selectp-{{ player.id }}" value="{{ player.id }}" onclick="disableSelect(this.id)" checked>
+                                        <label for="selectp-{{ player.id }}" style="width: 100px">{{ player.name }}</label>
+                                    </div>
+                                </div>
+                                {% if gamecategory == '501' %}
+                                    <select name="pscore" id="pscore-{{ player.id }}"></select>
+                                {% elif gamecategory == 'BB' %}
+                                    <input  type="number" min="0" max="198" required value="0" name='pscore' id="pscore-{{ player.id }}" >
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    <input type="submit" class="btn btn-primary" value="GO"/>
                     </div>
-                    {% if gamecategory == '501' %}
-                        <select name="pscore" id="pscore-{{ player.id }}"></select>
-                    {% elif gamecategory == 'BB' %}
-                        <input  type="number" min="0" max="198" required value="0" name='pscore' id="pscore-{{ player.id }}" >
-                    {% endif %}
                 </div>
-            {% endfor %}
-        <input type="submit" class="btn btn-success" value="GO"/>
-        </div>
-    </div>
-    </form>
-    {% else %}
-        <p>No active player(s) in the database. Please add some.</p>
-    {% endif %}
-<script>
-    var gamecategory = "{{ gamecategory|safe }}";
-</script>
-    <script src="{% static 'gamescoring/dartsscoring.js' %}"></script>
+            </form>
+            {% else %}
+                <p>No active player(s) in the database. Please add some.</p>
+            {% endif %}
+         </div>
+     </div>
+
 {% endblock %}
+
+{% block js %}
+    <script src="{% static 'gamescoring/dartsscoring.js' %}"></script>
+{% endblock js %}

@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # third party
+    'crispy_forms',
     # custom app
     'gamescoring',
     'scoretable',
@@ -130,3 +131,5 @@ MEDIA_ROOT =  os.getenv('MEDIA_ROOT')  # os.path.join(os.path.dirname(BASE_DIR),
 LOGIN_URL = '/'
 # LOGIN_REDIRECT_URL =('..')
 LOGOUT_REDIRECT_URL = '/'
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'

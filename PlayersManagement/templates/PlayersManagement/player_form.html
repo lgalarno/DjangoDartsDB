@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
 {% block title %}{% if update_view %}Update {{ object.name }}{% else %}Create a new player{% endif %}{% endblock %}
 
 {% block content %}
@@ -6,18 +8,26 @@
         <div class="col-sm-12 col-md-7">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <h3>{% if update_view %}Update {{ object.name }}{% else %}Create a new player{% endif %}</h3>
+                    <h3>{% if update_view %}Update {{ object.name }}{% else %}Create new darts{% endif %}</h3>
                     {% if error_message %}
                         <p><strong>{{ error_message }}</strong></p>
                     {% endif %}
-                    <form class="form-horizontal" role="form" action="" method="post" enctype="multipart/form-data">
+                    <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
-                        {% include 'PlayersManagement/form_template.html' %}
-                        <div class="form-group">
-                            <div class="col-sm-offset-2 col-sm-10">
-                                <button type="submit" class="btn btn-success">Submit</button>
+                    {{ form|crispy }}
+                        {% for field in form %}
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <span class="text-danger small">{{ field.errors }}</span>
+                                </div>
+{#                                <label class="control-label col-sm-2">{{ field.label_tag }}</label>#}
+{% comment %}                                {{ field.label_tag }}
+                                {{ field }}{% endcomment %}
                             </div>
-                        </div>
+                        {% endfor %}
+
+                                <button type="submit" class="btn btn-primary">Submit</button>
+
                     </form>
                 </div>
             </div>

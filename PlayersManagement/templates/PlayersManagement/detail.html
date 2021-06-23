@@ -4,23 +4,23 @@
 {% block title %}{{ player.name }}{% endblock %}
 
 {% block content %}
-<div class="card" style="width: 24rem;">
-  {% if player.picture %}
-    <img class="card-img-top" title="Detail" src="{{ player.picture.url }}" alt="Card image cap">
-  {% endif %}
-  <div class="card-body">
-    <h5 class="card-title">{{ player.name }}</h5>
-<p class="card-text">{{ player.description }}</p>
-  <p>{% if player.active %}Active{% else %}Inactive{% endif %}</p>
-<p><small>Created: {% localtime on %}{{ player.timestamp }}{% endlocaltime %}</small></p>
+    <div class="card" style="width: 24rem;">
+        {% if player.picture %}
+            <img class="card-img-top" title="Detail" src="{{ player.picture.url }}" alt="Card image cap">
+        {% endif %}
+        <div class="card-body">
+            <h5 class="card-title">{{ player.name }}</h5>
+            <p class="card-text">{{ player.description }}</p>
+            <p>{% if player.active %}Active{% else %}Inactive{% endif %}</p>
+            <p><small>Created: {% localtime on %}{{ player.timestamp }}{% endlocaltime %}</small></p>
             <!-- Update Player -->
-            <a href="{% url 'PlayersManagement:UpdatePlayer' id=player.id slug=player.slug %}" class="btn btn-secondary btn-sm" role="button">
+            <a href="{% url 'PlayersManagement:UpdatePlayer' id=player.id slug=player.slug %}" role="button">
                 <i class="fas fa-edit" title="Edit"></i>Edit
             </a>
             <!-- Delete Player -->
-            <a href="{% url 'PlayersManagement:DeletePlayer' id=player.id slug=player.slug %}" class="btn btn-secondary btn-sm" role="button">
+            <a href="{% url 'PlayersManagement:DeletePlayer' id=player.id slug=player.slug %}" role="button">
                 <i class="fas fa-trash-alt" title="Delete"></i>Delete
             </a>
-  </div>
-</div>
+        </div>
+    </div>
 {% endblock %}
