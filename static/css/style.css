@@ -1,0 +1,26 @@
+.success {
+    color: green;
+}
+.error {
+    color: red;
+}
+
+footer {
+    background-color: #efefef;
+    color: black;
+}
+
+.btn {
+    outline: none;
+    color: black;
+    background-color: transparent;
+    box-shadow: 0 0 0 0;
+}
+
+a {
+    color: #4d4d4d;
+    padding-right: 1em;
+}
+a:hover {
+    color: black;
+}
