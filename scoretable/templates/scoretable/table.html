@@ -67,18 +67,7 @@
 {% endblock content %}
 
 {% block js %}
-
-    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.21/rr-1.2.7/datatables.min.js"></script>
     <script src="{% static 'scoretable/datatables.js' %}"></script>
-    {% comment %}    <script>
-        $(document).ready( function () {
-            $('#games_table').DataTable({
-                    dom: 'B<"clear">lfrtip',
-                }
-            );
-        } );
-
-    </script>{% endcomment %}
 {% endblock js %}
 
 
