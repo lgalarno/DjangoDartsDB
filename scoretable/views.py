@@ -45,7 +45,7 @@ def webtables(request, category=None):
     else:
         messages.warning(request, "Nothing to do")
         return HttpResponseRedirect('/')
-    context = {'title':f'DartsTables{category}',
+    context = {'title':f'Tables {category}',
                'maxplist': maxplist,
                'headerrank':headerrank,
                'headersummary':headersummary,
