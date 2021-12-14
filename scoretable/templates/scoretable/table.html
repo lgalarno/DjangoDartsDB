@@ -22,11 +22,11 @@
                         <td>
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
-                                    <a href="{% url "scoretable:deletegame" k %}" class="btn btn-light btn-sm" role="button" onclick="return confirm('Are you sure?')">
-                                        <i class="far fa-trash-alt" title="delete" aria-hidden="true"></i>
-                                    </a>
                                     <a href="{% url "scoretable:editgame" k %}" class="btn btn-light btn-sm" role="button">
                                         <i class="fas fa-edit" title="edit" aria-hidden="true"></i>
+                                    </a>
+                                    <a href="{% url "scoretable:deletegame" k %}" class="btn btn-light btn-sm" role="button" onclick="return confirm('Are you sure?')">
+                                        <i class="far fa-trash-alt" title="delete" aria-hidden="true"></i>
                                     </a>
                                 </div>
                             </div>

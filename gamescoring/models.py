@@ -13,7 +13,7 @@ class GameNumber(models.Model):
     gamenumber  = models.IntegerField()
     date        = models.DateField()
     time        = models.TimeField()
-    category    = models.CharField(choices=GAMETYPE_CHOICES,max_length = 10)
+    category    = models.CharField(choices=GAMETYPE_CHOICES, max_length=10)
 
     def __str__(self):
         return "{0}-{1}".format(self.date, self.time)

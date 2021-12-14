@@ -1,3 +1,5 @@
+/* messages*/
+
 .success {
     color: green;
 }
@@ -5,8 +7,10 @@
     color: red;
 }
 
+/* General customizations */
+
 footer {
-    background-color: #efefef;
+    /*background-color: #efefef;*/
     color: black;
 }
 
@@ -25,6 +29,16 @@ a:hover {
     color: black;
 }
 
+/* LGA colors */
+.lga {
+  background-color: #ff8033;
+}
+
+hr.lga {
+  border-top: 1px solid #ff8033;
+}
+
+/* dataTable*/
 table.dataTable thead .sorting_asc {
   background: url("https://cdn.datatables.net/1.10.24/images/sort_asc.png") no-repeat center left;
 }

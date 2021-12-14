@@ -15,9 +15,9 @@ class Player(models.Model):
     name        = models.CharField(max_length=10, unique=True)
     slug        = models.SlugField(max_length=10)
     description = models.TextField(blank=True)
-    picture     = models.ImageField( upload_to = upload_location,
-                              null=True,
-                              blank=True)
+    picture     = models.ImageField(upload_to=upload_location,
+                                    null=True,
+                                    blank=True)
     timestamp   = models.DateTimeField(auto_now_add=True, auto_now=False)
     updated     = models.DateTimeField(auto_now_add=False, auto_now=True)
     active      = models.BooleanField(default=True)
@@ -54,13 +54,10 @@ def auto_delete_file_on_change(sender, instance, **kwargs):
     """
     if not instance.pk:
         return False
-
     try:
         old_picture = Player.objects.get(pk=instance.pk).picture
     except Player.DoesNotExist:
         return False
-
-
 # TODO make it better...
     new_picture = instance.picture
     if not bool(old_picture):

@@ -82,8 +82,8 @@ def csvzip(request):
         z.timesdownloaded = 0
         z.save()
         allfiles = zipcsvfile.objects.all()
-        context = {'title':'Download',
-                   'allfiles':allfiles
+        context = {'title': 'Download',
+                   'allfiles': allfiles
                    }
         return render(request, 'scoretable/download.html', context)
     # except:
@@ -91,25 +91,25 @@ def csvzip(request):
     #     return HttpResponseRedirect('/')
 
 
-def downloadzip(request,slug=None):
+def downloadzip(request, slug=None):
     f = get_object_or_404(zipcsvfile, slug=slug)
     link = f.path
     response = HttpResponse()
-    response['Content-Type']='application/zip'
-    response['Content-Disposition'] = f"attachment; filename='{f.filename}'"
-    response['X-Sendfile']= smart_str(link)
+    response['Content-Type'] = 'application/zip'
+    response['Content-Disposition'] = f"attachment; filename = '{f.filename}'"
+    response['X-Sendfile'] = smart_str(link)
     f.timesdownloaded += 1
     f.save()
     return response
 
 
-def editgame(request,id):
+def editgame(request, id):
     if request.method == "GET":
         q = get_object_or_404(GameNumber, id=id )
         # category = q.category
         # players = q.get_all_players()
 
-        context = {'title':'Edit',
+        context = {'title': 'Edit',
                    'game': q}
         return render(request, 'scoretable/edit.html', context)
     if request.method == "POST":
@@ -170,4 +170,4 @@ def upload_csv(request):
             return HttpResponseRedirect('/')
         else:
             messages.error(request, "Something wrong happened. Better check the database...")
-    return render(request, 'scoretable/uploadcsv.html', {'title':'Upload'})
+    return render(request, 'scoretable/uploadcsv.html', {'title': 'Upload'})
