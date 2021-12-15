@@ -1,6 +1,6 @@
 from .production import *
 
 try:
-    from .local import *
+    from .dev import *
 except:
     pass

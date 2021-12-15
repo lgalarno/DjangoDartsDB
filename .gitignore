@@ -2,8 +2,7 @@ venv
 *.pyc
 staticfiles
 db.sqlite3
-dartsDBweb/settings/local.py
-dartsDBweb/settings/secrets.py
+dartsDBweb/settings/dev.py
 .idea
 .env.*
 
