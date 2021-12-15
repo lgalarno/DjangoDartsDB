@@ -5,20 +5,23 @@
 {% block content %}
     <h2>{{ title }}</h2>
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-lg-6">
             <h3>Games</h3>
             <table class="table" id="games_table">
                 <thead>
                 <tr>
-                    <th scope="col"></th>
                     {% for s in headerrank %}
                         <th scope="col">{{ s }}</th>
                     {% endfor %}
+                    <th scope="col"></th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for k, r in maintable.items %}
                     <tr>
+                        {% for s in r %}
+                            <td>{{ s }}</td>
+                        {% endfor %}
                         <td>
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
@@ -31,16 +34,14 @@
                                 </div>
                             </div>
                         </td>
-
-                        {% for s in r %}
-                            <td>{{ s }}</td>
-                        {% endfor %}
                     </tr>
                 {% endfor %}
                 </tbody>
             </table>
         </div>
-        <div class="col-md-6">
+    <div class="col-sm-1">
+    </div>
+        <div class="col-lg-5">
             <h3>{{ stable_title }}</h3>
             <table class="table" id="standing_table">
                 <thead>
