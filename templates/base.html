@@ -10,14 +10,15 @@
     <main role="main" class="container-fluid">
         {% include 'messages_display.html' %}
         <div class="container-fluid mt-4">
-            {% block content %}{% endblock %}
+            {% block content %}hello{% endblock %}
         </div>
     </main> <!-- /container -->
 
     {% include 'footer.html' %}
 
-    {% block js %}
-    {% endblock js %}
+    {% include 'js.html' %}
+
+    {% block js %}{% endblock js %}
 
 </body>
 </html>

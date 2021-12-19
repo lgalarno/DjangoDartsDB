@@ -18,13 +18,14 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', TemplateView.as_view(template_name="index.html"), name="main"),
     path("robots.txt", TemplateView.as_view(template_name="robots.txt", content_type="text/plain"), ),
+    # TODO about page
     path('about/', TemplateView.as_view(template_name="index.html"), name="about"),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
-    path('login/', LoginView.as_view(), name = "login"),
-    path('logout/', LogoutView.as_view(), name = "logout"),
-    path('PlayersManagement/', include('PlayersManagement.urls', namespace ="PlayersManagement")),
-    path('score/', include('gamescoring.urls', namespace ="gamescoring")),
-    path('table/', include('scoretable.urls', namespace ="scoretable")),
+    path('login/', LoginView.as_view(), name="login"),
+    path('logout/', LogoutView.as_view(), name="logout"),
+    path('PlayersManagement/', include('PlayersManagement.urls', namespace="PlayersManagement")),
+    path('score/', include('gamescoring.urls', namespace="gamescoring")),
+    path('table/', include('scoretable.urls', namespace="scoretable")),
 ]
 
 if settings.DEBUG:
