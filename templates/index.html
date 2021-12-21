@@ -1,10 +1,13 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    {% if request.user.is_authenticated %}
-        <h2>Welcome {{ request.user }}</h2>
-        {% else %}
-        <h2>You need to login before making changes!</h2>
-    {% endif %}
+    <div class="row">
+        <div class="col text-center">
+            {% if request.user.is_authenticated %}
+                <h2>Welcome {{ request.user }}</h2>
+            {% else %}
+                <h2>You need to <a href="{% url 'login' %}">log in</a> before making changes!</h2>
+            {% endif %}
+        </div>
+    </div>
 {% endblock %}
-

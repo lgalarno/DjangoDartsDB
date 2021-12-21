@@ -45,12 +45,12 @@ def webtables(request, category=None):
     else:
         messages.warning(request, "Nothing to do")
         return HttpResponseRedirect('/')
-    context = {'title':f'Tables {category}',
+    context = {'title': f'Tables {category}',
                'maxplist': maxplist,
-               'headerrank':headerrank,
-               'headersummary':headersummary,
-               'maintable':rtable,
-               'summarytable':stable,
+               'headerrank': headerrank,
+               'headersummary': headersummary,
+               'maintable': rtable,
+               'summarytable': stable,
                'stable_title': stable_title}
     return render(request, 'scoretable/table.html', context)
 

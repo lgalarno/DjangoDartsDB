@@ -32,8 +32,8 @@ def WriteTables(tabletype):
     st = _summary_table(tabledict)
     maxplist = [str(i) for i in range(1, len(tabledict) + 1)]
     headerrank = ['#', 'Date', 'Time'] + maxplist
-    headersummary = [' '] + maxplist + ['pts']
-    return (tranks,st, headerrank, headersummary,maxplist)
+    headersummary = ['Name'] + maxplist + ['pts']
+    return (tranks, st, headerrank, headersummary, maxplist)
 
 
 def WriteScoreTables():
@@ -55,7 +55,7 @@ def WriteScoreTables():
     ssbb = _scoressum_table(tbb,maxp,3) #2 for #, date and time
     headerscore = ['#', 'Date', 'Time'] + allplayers + ['Mean']
     headersumscore = [' '] + allplayers
-    return (tbb, ssbb,headerscore, headersumscore, maxp)
+    return (tbb, ssbb, headerscore, headersumscore, maxp)
 
 
 def _summary_table(t):

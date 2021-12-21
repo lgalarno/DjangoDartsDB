@@ -7,7 +7,7 @@ $(document).ready( function () {
         "searching": false,
         "columnDefs": [
             { "orderable": false,
-                "targets": 6 }
+                "targets": -1 }
             ]
     }
     );

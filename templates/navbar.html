@@ -1,6 +1,6 @@
 {% load static %}
 <nav class="navbar navbar-expand-lg navbar-light lga">
-    <a class="navbar-brand" href="/"><img src="{% static 'images/dartboard.jpg' %}" width="30" class="d-inline-block avatar_img" alt="LGdartsDBweb"> LGdartsDBweb</a>
+    <a class="navbar-brand" href="/"><img src="{% static 'images/dartboard.jpg' %}" height="30" class="d-inline-block align-top rounded-circle" alt="LGdartsDBweb"> LGdartsDBweb</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -39,7 +39,7 @@
 
         <ul class="nav navbar-nav navbar-right">
           {% if request.user.is_authenticated %}
-              <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
+              <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Log out</a></li>
           {% endif %}
         </ul>
 
