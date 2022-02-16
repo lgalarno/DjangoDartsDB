@@ -2,7 +2,7 @@ import csv
 import datetime
 import io
 from .simplestats import mean, pstdev
-from PlayersManagement.models import Player
+from playersmanagement.models import Player
 from gamescoring.models import GameNumber,Participant
 from gamescoring.backend import ranking
 

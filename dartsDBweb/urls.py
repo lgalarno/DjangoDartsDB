@@ -23,7 +23,7 @@ urlpatterns = [
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     path('login/', LoginView.as_view(), name="login"),
     path('logout/', LogoutView.as_view(), name="logout"),
-    path('PlayersManagement/', include('PlayersManagement.urls', namespace="PlayersManagement")),
+    path('playersmanagement/', include('playersmanagement.urls', namespace="playersmanagement")),
     path('score/', include('gamescoring.urls', namespace="gamescoring")),
     path('table/', include('scoretable.urls', namespace="scoretable")),
 ]

@@ -18,7 +18,7 @@ INSTALLED_APPS = [
     # custom app
     'gamescoring',
     'scoretable',
-    'PlayersManagement',
+    'playersmanagement',
 ]
 
 MIDDLEWARE = [

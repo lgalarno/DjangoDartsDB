@@ -5,7 +5,7 @@ from .models import Player
 
 
 class PlayersListView(ListView):
-    template_name = 'PlayersManagement/list.html'
+    template_name = 'playersmanagement/list.html'
 
     def get_queryset(self):
         return Player.objects.all()
@@ -13,7 +13,7 @@ class PlayersListView(ListView):
 
 class PlayerDetailView(DetailView):
     model = Player
-    template_name = 'PlayersManagement/detail.html'
+    template_name = 'playersmanagement/detail.html'
 
     def get_object(self):
         obj = get_object_or_404(Player, id=self.kwargs['id'])
@@ -43,7 +43,7 @@ class PlayerUpdate(UpdateView):
 
 class PlayerDelete(DeleteView):
     model = Player
-    success_url = reverse_lazy('PlayersManagement:PlayersList')
+    success_url = reverse_lazy('playersmanagement:PlayersList')
 
     def get_object(self):
         obj = get_object_or_404(Player, id=self.kwargs['id'])

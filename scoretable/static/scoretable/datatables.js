@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////
 // DataTable
 /////////////////////////////////////////////////////////////
-$(document).ready( function () {
+$(function() {
     $('#games_table').DataTable({
         "dom": 'ltip',
         "searching": false,
@@ -16,4 +16,5 @@ $(document).ready( function () {
         "searching": false,
     }
     );
-} );
+}
+);

@@ -1,5 +1,5 @@
 from django.db import models
-from PlayersManagement.models import Player
+from playersmanagement.models import Player
 
 from scoretable.simplestats import mean
 

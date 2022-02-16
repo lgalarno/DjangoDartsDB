@@ -5,7 +5,7 @@ from django.utils import timezone
 from django.views.generic import CreateView
 from django.views.decorators.http import require_POST
 
-from PlayersManagement.models import Player
+from playersmanagement.models import Player
 
 from .backend import ranking
 from .forms import Participant501FormSet,ParticipantBBFormSet
