@@ -94,8 +94,8 @@ def SaveScore(request):
             header.append('score')
         zipped = zip(selectedplayers, pranks, pscores)
         now = timezone.now()
-        g = GameNumber(date= timezone.localdate(now),
-                       time= timezone.localtime(now).time(),
+        g = GameNumber(date=timezone.localdate(now),
+                       time=timezone.localtime(now).time(),
                        gamenumber= GameNumber.objects.filter(category = category).count()+1,
                        category=category)
         g.save()

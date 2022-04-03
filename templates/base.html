@@ -8,12 +8,13 @@
     {% include 'navbar.html' %}
 
     <main role="main" class="container-fluid">
+    <br>
         {% include 'messages_display.html' %}
         <div class="container-fluid mt-4">
             {% block content %}hello{% endblock %}
         </div>
+    <br>
     </main> <!-- /container -->
-
     {% include 'footer.html' %}
 
     {% include 'js.html' %}
