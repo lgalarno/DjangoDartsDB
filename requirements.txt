@@ -1,8 +1,8 @@
-asgiref==3.3.4
-Django==3.2.10
+asgiref==3.8.1
+Django==4.2
 django-crispy-forms==1.12.0
 Pillow==8.4.0
 python-dotenv==0.8.2
 pytz==2017.3
-sqlparse==0.3.0
+sqlparse==0.4.4
 typing-extensions==3.10.0.0

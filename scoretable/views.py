@@ -16,9 +16,9 @@ from .maketables import WriteTables, WriteScoreTables, Write_csv, CSV_to_db
 
 def csvweb(request, category=None):
     if category in ['501','BB']:
-        rtable, stable, headerrank,headersummary,maxplist = WriteTables(category)
+        rtable, stable, headerrank, headersummary, maxplist = WriteTables(category)
     elif category == 'BBScores':
-        rtable, stable, headerrank,headersummary,maxp = WriteScoreTables()
+        rtable, stable, headerrank, headersummary, maxp = WriteScoreTables()
     else:
         messages.warning(request, "Nothing to do")
         return HttpResponseRedirect('/')
@@ -56,12 +56,13 @@ def webtables(request, category=None):
 
 
 def csvzip(request):
-    path =  os.path.join(settings.MEDIA_ROOT, 'files')
+    path = os.path.join(settings.MEDIA_ROOT, 'files')
     datesuffix = datetime.datetime.now().strftime('_%Y_%m_%d')
     zipfilename = 'DartsTablesCSV' + datesuffix + '.zip'
     longzipfilename = os.path.join(path, zipfilename)
-    # try:
-    if datesuffix:
+    try:
+        if not os.path.exists(path):
+            os.makedirs(path)
         zip_archive = zipfile.ZipFile(longzipfilename, 'w')
 
         for tabletype in ['501', 'BB']:
@@ -76,19 +77,19 @@ def csvzip(request):
             mf = Write_csv(headerscore, sbb, headersumscore, ssbb)
             zip_archive.writestr(outfile, mf.read())
         zip_archive.close()
-        z, created = zipcsvfile.objects.get_or_create(filename=zipfilename)
-        z.path = smart_str(longzipfilename)
-        z.filename = zipfilename
-        z.timesdownloaded = 0
-        z.save()
-        allfiles = zipcsvfile.objects.all()
-        context = {'title': 'Download',
-                   'allfiles': allfiles
-                   }
-        return render(request, 'scoretable/download.html', context)
-    # except:
-    #     messages.warning(request, "Error making the csv files")
-    #     return HttpResponseRedirect('/')
+    except:
+        return HttpResponse(status=500)
+
+    z, created = zipcsvfile.objects.get_or_create(filename=zipfilename)
+    z.path = smart_str(longzipfilename)
+    z.filename = zipfilename
+    z.timesdownloaded = 0
+    z.save()
+    allfiles = zipcsvfile.objects.all()
+    context = {'title': 'Download',
+               'allfiles': allfiles
+               }
+    return render(request, 'scoretable/download.html', context)
 
 
 def downloadzip(request, slug=None):
@@ -96,7 +97,7 @@ def downloadzip(request, slug=None):
     link = f.path
     response = HttpResponse()
     response['Content-Type'] = 'application/zip'
-    response['Content-Disposition'] = f"attachment; filename = '{f.filename}'"
+    response['Content-Disposition'] = f"attachment; filename = {f.filename}"
     response['X-Sendfile'] = smart_str(link)
     f.timesdownloaded += 1
     f.save()
@@ -163,7 +164,7 @@ def upload_csv(request):
     if request.method == "POST":
         csvfile = request.FILES['csvfile']
         if not csvfile.name.endswith('.csv'):
-            messages.error(request, 'File is not CSV')
+            messages.error(request, 'File is not a CSV')
             return HttpResponseRedirect(reverse("scoretable:upload_csv"))
         if CSV_to_db(csvfile):
             messages.success(request, "It worked!")

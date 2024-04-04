@@ -20,7 +20,7 @@ load_dotenv(os.path.join(BASE_DIR, '.env'))
 
 # # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
-print(SECRET_KEY)
+
 #
 # # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = str(os.environ.get('DEBUG')) == "1"  # 1 == True
@@ -150,7 +150,7 @@ STATICFILES_DIRS = [
 ]
 
 STATIC_ROOT = os.environ.get('STATIC_ROOT')
-MEDIA_ROOT = os.environ.get('MEDIA_ROOT', os.path.join(BASE_DIR, "media"))
+MEDIA_ROOT = os.environ.get('MEDIA_ROOT', os.path.join(BASE_DIR, "../../media"))
 
 ######################################################################
 # LOGIN/LOGOUT REDIRECT

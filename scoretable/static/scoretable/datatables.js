@@ -3,17 +3,17 @@
 /////////////////////////////////////////////////////////////
 $(function() {
     $('#games_table').DataTable({
-        "dom": 'ltip',
-        "searching": false,
-        "columnDefs": [
-            { "orderable": false,
-                "targets": -1 }
+        searching: false,
+        columnDefs: [
+            { orderable: false,
+                targets: -1 }
             ]
     }
     );
         $('#standing_table').DataTable({
-        "dom": 'lt',
-        "searching": false,
+            dom: 'lt',
+            searching: false,
+/*            order: [[-1, 'des']],*/
     }
     );
 }

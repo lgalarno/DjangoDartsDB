@@ -8,7 +8,7 @@ from django.views.decorators.http import require_POST
 from playersmanagement.models import Player
 
 from .backend import ranking
-from .forms import Participant501FormSet,ParticipantBBFormSet
+from .forms import Participant501FormSet, ParticipantBBFormSet
 from .models import GameNumber, Participant
 
 
@@ -40,11 +40,11 @@ class NewScore(CreateView):
 
 
 #get or post?
-def EnterScore(request,category=None):
+def EnterScore(request, category=None):
     if category in ['BB','501']:
         players = Player.objects.filter(active=True)
         context = {'players': players,
-                   'gamecategory':category}
+                   'gamecategory': category}
         return render(request, 'gamescoring/EnterScore.html', context)
     else:
         messages.warning(request, "Nothing to do")
